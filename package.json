@@ -32,5 +32,8 @@
     "glob": "^4.0.5",
     "ember-django-adapter": "~0.4.0",
     "broccoli-sass": "~0.3.3"
+  },
+  "dependencies": {
+    "ember-cli-simple-auth": "~0.7.2"
   }
 }
