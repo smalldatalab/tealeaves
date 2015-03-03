@@ -1,1 +1,53 @@
-this is the compare page!
+<h1 style="text-align: center;">Compare Intervals</h1>
+
+<!-- selector section -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-5" style="text-align: center;">
+          {{ input class="interval_title" value="Span A" }}
+          {{ interval-chooser }}
+        </div>
+        <div class="col-md-2" style="text-align: center; display: flex; align-items: center; height: 130px;">
+            <button class="btn btn-lg btn-default" style="width: 150px;">Compare</button>
+        </div>
+        <div class="col-md-5" style="text-align: center;">
+          {{ input class="interval_title" value="Span B" }}
+          {{ interval-chooser }}
+        </div>
+    </div>
+</div>
+
+<hr style="width: 100%; border-color: #ccc;"/>
+
+<!-- visualization section-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="container-fluid" id="modules_list">
+              {{#each m in model}}
+              <div class="row">
+                  <div class="col-md-6">
+                    hello
+                  </div>
+                  <div class="col-md-6">
+                    {{ m }}
+                  </div>
+              </div>
+              {{/each}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            {{ component 'vizmods/word-cloud' }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <hr style="width: 100%; border-color: #ccc;"/>
+            <button {{ action 'addVizModule' }} class="btn btn-lg" style="width: 200px;">+ add a new module</button>
+        </div>
+    </div>
+</div>

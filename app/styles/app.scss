@@ -1,6 +1,5 @@
-@import url('/assets/bootstrap.css');
-@import url('/assets/bootstrap-theme.css');
+@import '_components';
 
-html, body {
-  margin: 20px;
-}
+h1 { font-size: 48px; }
+
+p { line-height: 150%; font-size: larger; }
