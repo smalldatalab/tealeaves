@@ -1,3 +1,31 @@
-<h2 id='title'>Welcome to Ember.js</h2>
+<nav class="navbar navbar-default" style="border-radius: 0; margin-bottom: 0;" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <span class="glyphicon glyphicon-leaf" style="margin-right: 6px; position: relative; vertical-align: top;" aria-hidden="true"></span> Tea Leaves v0.1
+            </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li>{{#link-to 'info' }}About{{/link-to}}</li>
+                <li>{{#link-to 'login' }}Connect{{/link-to}}</li>
+                <li>{{#link-to 'compare' }}Compare{{/link-to}}</li>
+                <li>{{#link-to 'browse' }}Browse{{/link-to}}</li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
 
-{{outlet}}
+<div class="container">
+
+    <div class="starter-template">
+        {{outlet}}
+    </div>
+
+</div><!-- /.container -->

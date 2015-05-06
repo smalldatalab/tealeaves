@@ -1,0 +1,21 @@
+<h1>Connect</h1>
+
+<p>
+    In order to analyze your email history, you must allow Tealeaves to access the EAF. If you do
+    not already have an EAF account, you must sign up on the site first and authorize it to access
+    your Gmail account.
+</p>
+
+<hr />
+
+{{#if session.isAuthenticated}}
+    <p>You have already connected Tealaves to your EAF account. Click 'logout' below to disconnect your account.</p>
+    <button class="btn btn-lg btn-danger" {{ action 'disconnect-eaf' }}>Disconnect from EAF</button>
+{{else}}
+    <p>
+        If you already have an account or have just created one, use the authorization link below to
+        grant Tealeaves access to your EAF account.
+    </p>
+
+    <p><button class="btn btn-lg" {{ action 'connect-eaf' }}>Connect to EAF</button></p>
+{{/if}}

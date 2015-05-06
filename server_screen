@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+setenv HOMEDIR /home/faisal/projects/tealeaves
+chdir $HOMEDIR
+
+screen -t server
+stuff "ember serve --port 4201 --live-reload false\012"
+
+screen -t shell

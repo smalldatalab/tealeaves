@@ -1,0 +1,18 @@
+@import '_components';
+@import "bootstrap.min";
+
+// override super-narrow progress bars
+.progress { height: 16px; }
+.progress .progress-bar {
+  text-align: left;
+  font-size: 11px;
+  line-height: 15px;
+  padding-left: 4px;
+}
+.dropdown-menu a { cursor: pointer; }
+
+h1 { font-size: 48px; }
+
+p { line-height: 150%; font-size: larger; }
+
+hr.spanning-hr { width: 100%; border-color: #ccc; }

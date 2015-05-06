@@ -17,4 +17,46 @@ var app = new EmberApp();
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
+app.import('bower_components/d3/d3.min.js');
+
+// app.import('bower_components/bootstrap/dist/css/bootstrap.css');
+// app.import('bower_components/bootstrap/dist/css/bootstrap-theme.css');
+// app.import('bower_components/bootstrap/dist/css/bootstrap.css.map', { destDir: 'assets' });
+// app.import('bower_components/bootstrap/dist/css/bootstrap-theme.css.map', { destDir: 'assets' });
+app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.eot', { destDir: 'fonts' });
+app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf', { destDir: 'fonts' });
+app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.svg', { destDir: 'fonts' });
+app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff', { destDir: 'fonts' });
+// app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2', { destDir: 'fonts' });
+app.import('bower_components/bootstrap-datepicker/css/datepicker3.css');
+
+// font-awesome
+app.import("bower_components/font-awesome/css/font-awesome.css");
+app.import("bower_components/font-awesome/fonts/fontawesome-webfont.eot", { destDir: "fonts" });
+app.import("bower_components/font-awesome/fonts/fontawesome-webfont.svg", { destDir: "fonts" });
+app.import("bower_components/font-awesome/fonts/fontawesome-webfont.ttf", { destDir: "fonts" });
+app.import("bower_components/font-awesome/fonts/fontawesome-webfont.woff", { destDir: "fonts" });
+app.import("bower_components/font-awesome/fonts/fontawesome-webfont.woff2", { destDir: "fonts" });
+app.import("bower_components/font-awesome/fonts/FontAwesome.otf", { destDir: "fonts" });
+
+app.import('bower_components/bootstrap/dist/js/bootstrap.js');
+
+// jq/boostrap plugins
+app.import('bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js');
+app.import('bower_components/jquery-sortable/source/js/jquery-sortable-min.js');
+
+// time manipulation plugins
+app.import('bower_components/momentjs/moment.js');
+// app.import('bower_components/moment-timezone/builds/moment-timezone-with-data.min.js');
+app.import('bower_components/humanize-duration/humanize-duration.js');
+
+// d3 plugins
+app.import('bower_components/d3-cloud/d3.layout.cloud.js');
+app.import('bower_components/d3pie/d3pie/d3pie.min.js');
+
+// misc plugins
+app.import('bower_components/cal-heatmap/cal-heatmap.js');
+app.import('bower_components/cal-heatmap/cal-heatmap.css');
+app.import('bower_components/font-awesome-animation/dist/font-awesome-animation.min.css');
+
 module.exports = app.toTree();

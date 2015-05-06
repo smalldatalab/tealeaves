@@ -1,0 +1,130 @@
+.header-column {
+//  border-bottom: solid 3px #ccc; background: #eee; padding: 5px; padding-left: 10px;
+}
+
+// styles for the date pickers + extensions
+button.shift_control {
+  color: inherit; cursor: pointer; padding-top: 0; padding-bottom: 0;
+}
+button.shift_control[disabled="true"] {
+  color: #ccc;
+}
+
+// styles for the filter bar
+.filter-bar {
+  margin-top: 1em;
+}
+
+.module_title {
+  font-weight: bold; font-size: 18px; /* margin-right: 0.1em; */
+}
+.module_title a, .module_title a:link, .module_title a:hover, .module_title a:active,  .module_title a:visited {
+  color: inherit;
+  cursor: pointer;
+}
+
+.vizbox {
+  /*
+  -moz-box-shadow:    inset 0 10px 15px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 10px 15px rgba(0, 0, 0, 0.2);
+  box-shadow:         inset 0 10px 15px rgba(0, 0, 0, 0.2);
+  background-color: #ccc;
+  border: solid 1px #999;
+  */
+
+  max-height: 900px;
+  position: relative;
+  overflow-x: auto;
+  margin-bottom: 2em;
+
+  //min-height: 280px;
+}
+.vizbox.unloaded {
+  background-color: #ccc;
+  background-image: url('/img/stripes.png');
+  min-height: 280px;
+}
+.vizbox.unloaded:after {
+  content: '(no date selected)';
+  color: #aaa;
+  font-weight: bold;
+  font-size: 42px;
+  display: block;
+  margin: 110px auto 20px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.vizbox .loader, .vizbox .borked {
+  display: none; position: absolute; font-size: 128px; width: 128px; height: 128px; left: 50%; top: 50%; margin-top: -96px; margin-left: -64px;
+}
+
+.interval_title {
+  font-size: 26px;
+  border: none;
+  text-align: center;
+  border-bottom: dotted 1px gray;
+  padding-bottom: 3px;
+}
+
+// random viz's
+.word-cloud, .top-alters-pie {
+  min-height: 280px;
+}
+
+// calendar heatmap
+.heat-map {
+  overflow: visible;
+  .subdomain-text {
+    fill: #333;
+    font-size: 11px;
+  }
+  .graph-label {
+    font-size: 14px;
+    fill: #333;
+  }
+}
+
+// rhythm
+.rhythm-cal {
+  width: 98%;
+
+  td, th {
+    padding: 5px;
+    width: 11.875%;
+  }
+
+  tr.meridian td { border-top: solid 2px black; }
+
+  td.hours-rule {
+    width: 5%;
+    padding-right: 10px;
+    text-align: right;
+  }
+
+  td.weekday-hour {
+    border: solid 1px #eee;
+  }
+}
+
+// draggables
+
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+.sortable li.placeholder {
+  position: relative;
+  /** More li styles **/
+}
+.sortable li.placeholder:before {
+  position: absolute;
+  /** Define arrowhead **/
+}

@@ -2,6 +2,7 @@
 
 # IDE garbage
 /.idea
+.DS_Store
 
 # compiled output
 /dist
