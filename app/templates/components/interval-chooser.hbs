@@ -1,7 +1,19 @@
 <div class="input-daterange input-group" id="datepicker" style="margin: 10px auto;">
-    <input type="text" class="input-sm form-control" name="start" />
-    <span class="input-group-addon">to</span>
-    <input type="text" class="input-sm form-control" name="end" />
+  {{#if hasShiftControls}}
+    <div style="display: table-cell; vertical-align: middle;">
+      <button {{action 'shift' 'left'}} class="shift_control btn btn-link" style="outline: none;"><span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span></button>
+    </div>
+  {{/if}}
+  <div class="shifter" style="display: table;">
+      <input type="text" class="input-sm form-control" name="start" />
+      <span class="input-group-addon">to</span>
+      <input type="text" class="input-sm form-control" name="end" />
+  </div>
+  {{#if hasShiftControls}}
+    <div style="display: table-cell; vertical-align: middle;">
+      <button {{action 'shift' 'right'}} {{ bind-attr disabled=right_exceeds_today }} class="shift_control btn btn-link" style="outline: none;"><span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
+    </div>
+  {{/if}}
 </div>
 
 <span style="font-size: 12px;">{{ span_duration }}</span>

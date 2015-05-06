@@ -1,0 +1,16 @@
+<div class="alters_box">
+    <div class="container-fluid">
+
+      {{#each person in alters}}
+          <div class="row">
+              <div class="col-md-6">
+                {{person.id}}. {{ person.name }}
+              </div>
+              <div class="col-md-6">
+                  {{ bootstrap-progressbar value=person.count maxvalue=total_mails }}
+              </div>
+          </div>
+      {{/each}}
+
+    </div>
+</div>

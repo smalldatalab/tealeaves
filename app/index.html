@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Tea Leaves v0.1</title>
+    <title>Tealeaves v0.1</title>
+    <link rel="icon" type="image/png" href="/favicon-leaf.png" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -11,11 +12,15 @@
 
     <link rel="stylesheet" href="assets/vendor.css">
     <link rel="stylesheet" href="assets/tealeaves.css">
+
+    {{content-for 'head-footer'}}
   </head>
   <body>
     {{content-for 'body'}}
 
     <script src="assets/vendor.js"></script>
     <script src="assets/tealeaves.js"></script>
+
+    {{content-for 'body-footer'}}
   </body>
 </html>

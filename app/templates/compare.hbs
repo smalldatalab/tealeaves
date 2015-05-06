@@ -3,51 +3,91 @@
 <!-- selector section -->
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-5" style="text-align: center;">
-          {{ input class="interval_title" value="Span A" }}
-          {{ interval-chooser }}
+        <div class="col-md-6" style="text-align: center;">
+          {{ input class="interval_title" value=A_title }}
+          {{ interval-chooser action="setIntervalA" start_date=A_start_date end_date=A_end_date  }}
         </div>
-        <div class="col-md-2" style="text-align: center; display: flex; align-items: center; height: 130px;">
-            <button class="btn btn-lg btn-default" style="width: 150px;">Compare</button>
-        </div>
-        <div class="col-md-5" style="text-align: center;">
-          {{ input class="interval_title" value="Span B" }}
-          {{ interval-chooser }}
+        <!--<div class="col-md-2" style="text-align: center; display: flex; align-items: center; height: 130px;">-->
+        <!--<button class="btn btn-lg btn-default" style="width: 150px;">Compare</button>-->
+        <!--</div>-->
+        <div class="col-md-6" style="text-align: center;">
+          {{ input class="interval_title" value=B_title }}
+          {{ interval-chooser action="setIntervalB" start_date=B_start_date end_date=B_end_date  }}
         </div>
     </div>
 </div>
 
-<hr style="width: 100%; border-color: #ccc;"/>
+{{ filter-bar action="updateFilter"
+    start_date_A=A_start_date end_date_A=A_end_date
+    start_date_B=B_start_date end_date_B=B_end_date
+}}
+
+<!--<hr class="spanning-hr"/>-->
 
 <!-- visualization section-->
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <div class="container-fluid" id="modules_list">
-              {{#each m in model}}
-              <div class="row">
-                  <div class="col-md-6">
-                    hello
+            <div class="sortable" id="modules_list">
+            {{#each m in model}}
+              <div class="container-fluid sortable-component">
+                  <div class="row" style="margin-bottom: 10px;">
+                      <div class="col-md-12 header-column" style="display: flex; align-items: baseline;">
+                          <div class="module_title" style="flex: 1 1 100%;"><span {{ bind-attr class=m.icon }} style="margin-right: 0.3em;" aria-hidden="true"></span> <a class="toggle_vis_btn" href="#" {{ action 'toggleVizModuleVisibility' m }}>{{ m.name }}</a></div>
+                          <div style="flex: 1 0 100px; text-align: right;">(<a href="#" {{ action 'removeVizModule' m }}>remove</a>)</div>
+                      </div>
                   </div>
-                  <div class="col-md-6">
-                    {{ m }}
+
+                  {{#unless m.invisible}}
+                  <div class="row" style="margin-bottom: 10px;">
+                      <div class="col-md-6">
+                        {{ component m.type start_date=A_start_date end_date=A_end_date filters=filter_repr }}
+                      </div>
+                      <div class="col-md-6">
+                        {{ component m.type start_date=B_start_date end_date=B_end_date filters=filter_repr }}
+                      </div>
                   </div>
+                  {{/unless}}
               </div>
-              {{/each}}
+            {{/each}}
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row">
+<hr class="spanning-hr"/>
+
+<div class="container-fluid">
+    {{!--
+    <div class="row" style="margin-bottom: 1em; text-align: right;">
         <div class="col-md-12">
-            {{ component 'vizmods/word-cloud' }}
+            {{ view "select" content=available_components optionValuePath="content.type" optionLabelPath="content.name" selection=selected_component prompt="(select module)" }}
+
+            <button {{ action 'addVizModule' }} id="add_module_btn" class="btn" style="width: 200px;">add module</button>
         </div>
     </div>
+    --}}
 
-    <div class="row">
+    <div class="row" style="margin-bottom: 1em; text-align: right;">
         <div class="col-md-12">
-            <hr style="width: 100%; border-color: #ccc;"/>
-            <button {{ action 'addVizModule' }} class="btn btn-lg" style="width: 200px;">+ add a new module</button>
+            <!-- Single button -->
+            <div class="btn-group dropup">
+                <button type="button" id="add_module_btn" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" {{ bind-attr disabled=no_components }}>
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Module <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    {{#each m in available_components }}
+                    <li><a {{ action 'addVizModule' m.type }}> <span {{ bind-attr class=m.icon }} style="margin-right: 1em;" aria-hidden="true"></span> {{ m.name }}</a></li>
+                    {{ else }}
+                    <li><a><i>(no more modules...)</i></a></li>
+                    {{/each}}
+
+                    {{#unless no_components }}
+                    <li class="divider"></li>
+                    <li><a {{ action 'addVizModule' '*' }}> <span class="glyphicon glyphicon-asterisk" style="margin-right: 1em;" aria-hidden="true"></span> Add All</a></li>
+                    {{/unless}}
+                </ul>
+            </div>
         </div>
     </div>
 </div>
