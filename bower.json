@@ -22,6 +22,8 @@
     "d3-cloud": "https://github.com/jasondavies/d3-cloud.git#~1.0.5",
     "font-awesome": "~4.3.0",
     "d3pie": "~0.1.6",
-    "jquery-sortable": "~0.9.12"
+    "jquery-sortable": "~0.9.12",
+    "cal-heatmap": "~3.5.2",
+    "moment-timezone": "~0.3.1"
   }
 }

@@ -39,6 +39,11 @@
     "ember-export-application-global": "^1.0.2",
     "express": "^4.8.5",
     "glob": "^4.0.5",
-    "torii": "0.2.2"
+    "torii": "0.2.2",
+    "liquid-fire": "~0.18.0"
+  },
+  "dependencies": {
+    "liquid-fire": "git://github.com/ef4/liquid-fire",
+    "ember-cli": "~0.2.2"
   }
 }

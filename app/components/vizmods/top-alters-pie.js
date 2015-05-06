@@ -76,7 +76,11 @@ export default BaseMod.extend({
 
         // add an 'other' category if we were forced to use it
         if (leftovers > 0) {
+<<<<<<< HEAD
           revised_counts.push({ label: "(other)", value: leftovers, color: strToColor("(other)") });
+=======
+          revised_counts.push({ label: "other", value: leftovers, color: strToColor("(other)") });
+>>>>>>> 9c0a1e1d6348091ef2f12b722e7472399c9051fc
         }
 
         makePie(_this, _this.$(".d3box").get(0), revised_counts);
