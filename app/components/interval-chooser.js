@@ -11,6 +11,7 @@ export default Ember.Component.extend({
   start_date: null,
   end_date: null,
   hasShiftControls: true,
+
   didInsertElement: function() {
     // save handle so we can get at the component inside the date change handler
     var _this = this;
@@ -28,16 +29,27 @@ export default Ember.Component.extend({
         _this.set('end_date', d3.time.day.offset(e.date, 1));
       }
     });
+    
+    // sync up the start and end dates (if present; they might be null, which is fine)
+    this.set_dates(this.get('start_date'), this.get('end_date'));
+  },
 
-    var st = this.get('start_date'), en = this.get('end_date');
-
-    // if we have values for start and end, fill them in
+  set_dates: function(st, en) {
     if (st != null && en != null) {
+      /*
+      // FIXME: for some reason this isn't triggering the range highlighting until the user re-clicks on a date
       this.$(".input-daterange .input-sm").each(function() {
         Ember.$(this).datepicker('update', (Ember.$(this).attr('name') === 'start')?st.toLocaleDateString():en.toLocaleDateString());
       });
+      */
+
+      // get the datepicker object and access its pickers directly
+      var datepicker = this.$(".input-daterange").data('datepicker');
+      datepicker.pickers[0].setDate(st);
+      datepicker.pickers[1].setDate(en);
     }
   },
+
   span_duration: function() {
     var s = this.get('start_date'), e = this.get('end_date');
 
@@ -50,6 +62,7 @@ export default Ember.Component.extend({
 
     return "(no interval selected)";
   }.property('start_date', 'end_date'),
+
   right_exceeds_today: function() {
     if (!this.get('start_date') || !this.get('end_date')) {
       return false;
@@ -59,6 +72,16 @@ export default Ember.Component.extend({
 
     return new Date(e.getTime() + (e-s)) >= new Date();
   }.property('start_date', 'end_date'),
+
+  date_chosen: function() {
+    var start_date = this.get('start_date');
+    var end_date = this.get('end_date');
+
+    if (start_date != null && end_date != null) {
+      this.sendAction('action', start_date, end_date);
+    }
+  }.observes('start_date', 'end_date'),
+
   actions: {
     shift: function(dir) {
       var s = d3.time.day.floor(this.get('start_date')), e = d3.time.day.floor(this.get('end_date'));
@@ -92,14 +115,6 @@ export default Ember.Component.extend({
           }
         });
       }
-    },
-    date_chosen: function() {
-      var start_date = this.get('start_date');
-      var end_date = this.get('end_date');
-
-      if (start_date != null && end_date != null) {
-        this.sendAction('action', start_date, end_date);
-      }
-    }.observes('start_date', 'end_date')
+    }
   }
 });
