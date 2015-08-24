@@ -19,7 +19,7 @@ export default Ember.Component.extend({
       .appendTo(this.$());
 
     // also append a broken/missing identifier
-    Ember.$('<div class="borked"><i class="fa fa-question-circle faa-horizontal animated"></i></div>')
+    Ember.$('<div class="borked"><i class="fa fa-question-circle faa-flash animated"></i></div>')
       .appendTo(this.$());
 
     // animate the display of each module

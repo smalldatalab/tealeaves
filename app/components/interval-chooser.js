@@ -29,7 +29,7 @@ export default Ember.Component.extend({
         _this.set('end_date', d3.time.day.offset(e.date, 1));
       }
     });
-    
+
     // sync up the start and end dates (if present; they might be null, which is fine)
     this.set_dates(this.get('start_date'), this.get('end_date'));
   },

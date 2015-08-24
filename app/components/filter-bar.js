@@ -11,6 +11,7 @@ export default Ember.Component.extend({
   alters: [],
   filters: {},
   filter_repr: function() { return JSON.stringify(this.get('filters')); }.property('filters'),
+  isAlterTimeConstrained: true,
   // selected_alter: null,
 
   didInsertElement: function() {
@@ -18,6 +19,28 @@ export default Ember.Component.extend({
   },
 
   bind: function() {
+    this.bindAlters();
+  }.observes('isAlterTimeConstrained'),
+
+  filterAlterChanged: function() {
+    this.filters['alter'] = this.get('selected_alter');
+    this.notifyPropertyChange('filters');
+    this.sendAction('action', this.get('filters'));
+  }.observes('selected_alter'),
+
+  actions: {
+    'toggleFilters': function() {
+      this.$(".filter-items").toggle(300);
+    },
+    'applyFilter': function() {
+      this.sendAction('action', this.get('filters'));
+    }
+  },
+
+  /**
+   * Queries for list of alters and populates dropdown with the results.
+   */
+  bindAlters: function() {
     this.$(".alters-loader").show();
 
     var params = {};
@@ -32,20 +55,8 @@ export default Ember.Component.extend({
     var _this = this;
     ajax('https://eaf.smalldata.io/v1/aggregates/alters/data/', { data: params })
       .then(function(data) {
-        /*
-        var sorted_alters = data
-          .filter(function(x) {
-            var addr = x.address;
-            return addr != null && addr != "" && addr.indexOf(",") == -1 && !unknown_email.test(addr);
-          })
-          .map(function(x) {
-            return {
-              display: x.address.replace(emails, '').replace(stripquotes, '').replace(stripparens, '').trim(),
-              value: x.address
-            };
-          });
-        */
-
+        // create a dictionary mapping 'displayed address' => '{ display, actual } for deduplication purposes
+        // later we'll just convert it into a list of values and disregard the key
         var alters = data.reduce(function(acc, x) {
           var addr = x.address;
 
@@ -86,22 +97,6 @@ export default Ember.Component.extend({
         // disable the loading spinner
         _this.$(".alters-loader").fadeOut(300);
       });
-  }.observes('isAlterTimeConstrained'),
-
-  filterAlterChanged: function() {
-    var selection = this.get('selected_alter');
-    this.filters['alter'] = selection;
-    this.notifyPropertyChange('filters');
-    this.sendAction('action', this.get('filters'));
-  }.observes('selected_alter'),
-
-  actions: {
-    'toggleFilters': function() {
-      this.$(".filter-items").toggle(300);
-    },
-    'applyFilter': function() {
-      this.sendAction('action', this.get('filters'));
-    }
   }
 });
 
