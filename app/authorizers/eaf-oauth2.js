@@ -13,7 +13,8 @@ export default Base.extend({
    */
   authorize: function(jqXHR) {
     // var accessToken = this.get('session.content.token');
-    var accessToken = this.get('session.content.authorizationToken.access_token');
+    // FIXME: as of 9/9/15, this for some reason is now 'session.content.secure...' instead of just 'session.content' -- find out why
+    var accessToken = this.get('session.content.secure.authorizationToken.access_token');
 
     if (this.get('session.isAuthenticated') && !Ember.isEmpty(accessToken)) {
       jqXHR.setRequestHeader('Authorization', 'Bearer ' + accessToken);
