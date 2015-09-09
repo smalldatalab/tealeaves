@@ -11,7 +11,7 @@
   </div>
   {{#if hasShiftControls}}
     <div style="display: table-cell; vertical-align: middle;">
-      <button {{action 'shift' 'right'}} {{ bind-attr disabled=right_exceeds_today }} class="shift_control btn btn-link" style="outline: none;"><span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
+      <button {{action 'shift' 'right'}} disabled="{{right_exceeds_today}}" class="shift_control btn btn-link" style="outline: none;"><span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
     </div>
   {{/if}}
 </div>

@@ -29,11 +29,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="sortable" id="modules_list">
-            {{#each m in model}}
+            {{#each model as |m|}}
               <div class="container-fluid sortable-component">
                   <div class="row" style="margin-bottom: 10px;">
                       <div class="col-md-12 header-column" style="display: flex; align-items: baseline;">
-                          <div class="module_title" style="flex: 1 1 100%;"><span {{ bind-attr class=m.icon }} style="margin-right: 0.3em;" aria-hidden="true"></span> <a class="toggle_vis_btn" href="#" {{ action 'toggleVizModuleVisibility' m }}>{{ m.name }}</a></div>
+                          <div class="module_title" style="flex: 1 1 100%;"><span class="{{m.icon}}" style="margin-right: 0.3em;" aria-hidden="true"></span> <a class="toggle_vis_btn" href="#" {{ action 'toggleVizModuleVisibility' m }}>{{ m.name }}</a></div>
                           <div style="flex: 1 0 100px; text-align: right;">(<a href="#" {{ action 'removeVizModule' m }}>remove</a>)</div>
                       </div>
                   </div>
@@ -72,12 +72,12 @@
         <div class="col-md-12">
             <!-- Single button -->
             <div class="btn-group dropup">
-                <button type="button" id="add_module_btn" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" {{ bind-attr disabled=no_components }}>
+                <button type="button" id="add_module_btn" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" disabled={{no_components}}>
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Module <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    {{#each m in available_components }}
-                    <li><a {{ action 'addVizModule' m.type }}> <span {{ bind-attr class=m.icon }} style="margin-right: 1em;" aria-hidden="true"></span> {{ m.name }}</a></li>
+                    {{#each available_components as |m|}}
+                    <li><a {{ action 'addVizModule' m.type }}> <span class="{{m.icon}}" style="margin-right: 1em;" aria-hidden="true"></span> {{ m.name }}</a></li>
                     {{ else }}
                     <li><a><i>(no more modules...)</i></a></li>
                     {{/each}}

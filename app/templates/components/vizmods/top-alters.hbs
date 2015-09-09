@@ -1,7 +1,7 @@
 <div class="alters_box">
     <div class="container-fluid">
 
-      {{#each person in alters}}
+      {{#each alters as |person|}}
           <div class="row">
               <div class="col-md-6">
                 {{person.id}}. {{ person.name }}
