@@ -36,10 +36,12 @@ export default Ember.Component.extend({
 
     if (start_date == null || end_date == null) {
       // console.error("Can't refresh with a null range");
+      // we just return here b/c this occurs quite commonly (i.e. when the user selects a start, but not end date)
+      // they'll eventually rectify it, which will allow this to continue
       return;
     }
 
-    // convert dates to moments so we can format them
+    // convert dates to moment.js moments so we can format them
     start_date = moment(start_date);
     end_date = moment(end_date);
 
@@ -57,7 +59,7 @@ export default Ember.Component.extend({
    * @param end_date end of the period (exclusive) for which to display data
    */
   bind: function(start_date, end_date) {
-    // inheriting classes will override this
+    // inheriting classes should definitely override this
     console.warn("bind() fired on base module with interval: ", start_date, " => ", end_date);
   }
 });
