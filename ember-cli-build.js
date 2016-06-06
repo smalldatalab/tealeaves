@@ -54,7 +54,7 @@ app.import('bower_components/momentjs/moment.js');
 app.import('bower_components/humanize-duration/humanize-duration.js');
 
 // d3 plugins
-app.import('bower_components/d3-cloud/d3.layout.cloud.js');
+app.import('bower_components/d3-cloud/build/d3.layout.cloud.js');
 app.import('bower_components/d3pie/d3pie/d3pie.min.js');
 
 // misc plugins

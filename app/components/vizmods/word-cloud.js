@@ -138,7 +138,12 @@ function accumulateTokens(page, args, limit, accumulator, complete) {
 function normalizeWordCounts(accumulator, words) {
   return words.reduce(function(d, cur) {
     // use the "default dict" trick to initialize missing elements in the count
-    (cur.word in d && d[cur.word] !== null) || (d[cur.word] = 0);
+    // (cur.word in d && d[cur.word] !== null) || (d[cur.word] = 0);
+    // ....actually, don't use that trick because it makes jslinters barf
+    if (!(cur.word in d && d[cur.word] !== null)) {
+      d[cur.word] = 0;
+    }
+
     // add the number of times this word has occurred for each observation of it
     d[cur.word] += cur.count;
     // send back our augmented dictionary for the next round
