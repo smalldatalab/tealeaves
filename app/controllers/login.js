@@ -3,13 +3,14 @@
  */
 
 import Ember from 'ember';
-import LoginControllerMixin from 'simple-auth/mixins/login-controller-mixin';
+// import LoginControllerMixin from 'ember-simple-auth/mixins/login-controller-mixin';
 
-export default Ember.Controller.extend(LoginControllerMixin, {
+export default Ember.Controller.extend({
+  session: Ember.inject.service('session'),
   authenticator: 'authenticator:torii',
   actions: {
     'connect-eaf': function() {
-      this.get('session').authenticate('simple-auth-authenticator:torii', 'eaf-oauth2');
+      this.get('session').authenticate('ember-simple-auth-authenticator:torii', 'eaf-oauth2');
     },
     'disconnect-eaf': function() {
         this.get('session').invalidate();

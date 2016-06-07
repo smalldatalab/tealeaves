@@ -2,7 +2,7 @@
  * Created by faisal on 3/5/15.
  */
 
-import Base from 'simple-auth/authorizers/base';
+import Base from 'ember-simple-auth/authorizers/base';
 import Ember from 'ember';
 
 export default Base.extend({

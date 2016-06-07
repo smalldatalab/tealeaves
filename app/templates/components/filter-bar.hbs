@@ -18,13 +18,22 @@
         <li class="list-group-item">
           <div style="margin-bottom: 5px;">
             <i class="fa fa-users" style="margin: 5px;"></i> include only this alter: <i class="fa fa-circle-o-notch fa-spin alters-loader"></i><br />
-            {{ view "select"
-            content=alters
-            value=selected_alter
-            prompt="(all alters)"
-            optionValuePath="content.value"
-            optionLabelPath="content.display"
-            }}
+
+            <select onchange={{action (mut alter) value="target.value"}}>
+                {{#each alters as |selected_alter|}}
+                    <option value="{{selected_alter}}" selected={{eq vehicle selected_alter}}>{{selected_alter}}</option>
+                {{/each}}
+            </select>
+
+            {{!--
+              {{ view "select"
+              content=alters
+              value=selected_alter
+              prompt="(all alters)"
+              optionValuePath="content.value"
+              optionLabelPath="content.display"
+              }}
+            --}}
           </div>
           <div>
               <label style="font-weight: normal;">
