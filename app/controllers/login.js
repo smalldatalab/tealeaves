@@ -10,7 +10,8 @@ export default Ember.Controller.extend({
   authenticator: 'authenticator:torii',
   actions: {
     'connect-eaf': function() {
-      this.get('session').authenticate('ember-simple-auth-authenticator:torii', 'eaf-oauth2');
+      console.log(this.get('session'));
+      this.get('session').authenticate('authenticator:eaf-oauth2', 'eaf-oauth2');
     },
     'disconnect-eaf': function() {
         this.get('session').invalidate();

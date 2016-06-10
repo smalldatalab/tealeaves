@@ -12,7 +12,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
   afterModel: function() {
     // just ping the server to make sure we're really connected
-    return ajax('https://eaf.smalldata.io/v1/ping');
+    return this.get('session').authorize('authorizer:eaf-oauth2', function() {
+      return ajax('http://eaf.smalldata.io/api/ping');
+    });
   },
   component_list: []
 });

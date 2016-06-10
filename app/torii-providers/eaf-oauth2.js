@@ -9,7 +9,7 @@ import {configurable} from 'torii/configuration';
 
 export default Provider.extend({
     name: 'eaf-oauth2',
-    baseUrl: ('https://eaf.smalldata.io/oauth/authorize'),
+    baseUrl: ('http://eaf.smalldata.io/oauth/authorize'),
 
     responseParams: ['access_token', 'token_type', 'expires_in'],
 
@@ -31,7 +31,7 @@ export default Provider.extend({
           console.log("Auth data: ", JSON.stringify(authData));
 
             // hit the eaf API to get details about the user so we can restore our session
-            return Ember.$.getJSON("https://eaf.smalldata.io/oauth/me", { access_token: authData.authorizationToken.access_token })
+            return Ember.$.getJSON("http://eaf.smalldata.io/oauth/me", { access_token: authData.authorizationToken.access_token })
                 .then(function(response) {
                     authData.user_id = response.id;
                     authData.userEmail = response.username;
