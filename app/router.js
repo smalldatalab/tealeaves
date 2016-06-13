@@ -11,6 +11,8 @@ Router.map(function() {
   this.route('browse');
   this.route('login');
   this.route('authed');
+
+  this.route('andomtest');
 });
 
 export default Router;
