@@ -7,6 +7,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   classNames: ['vizbox','unloaded'],
+  ajax: Ember.inject.service(),
   start_date: null,
   end_date: null,
   filters: null,

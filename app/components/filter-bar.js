@@ -3,7 +3,7 @@
  */
 
 import Ember from 'ember';
-import ajax from 'ic-ajax';
+// import ajax from 'ic-ajax';
 /* global moment */
 
 export default Ember.Component.extend({
@@ -13,6 +13,8 @@ export default Ember.Component.extend({
   filter_repr: function() { return JSON.stringify(this.get('filters')); }.property('filters'),
   isAlterTimeConstrained: true,
   // selected_alter: null,
+
+  ajax: Ember.inject.service(),
 
   didInsertElement: function() {
     this.bind();
@@ -53,7 +55,7 @@ export default Ember.Component.extend({
     }
 
     var _this = this;
-    ajax('https://eaf.smalldata.io/v1/aggregates/alters/data/', { data: params })
+    this.get('ajax').request('https://eaf.smalldata.io/v1/aggregates/alters/data/', { data: params })
       .then(function(data) {
         // create a dictionary mapping 'displayed address' => '{ display, actual } for deduplication purposes
         // later we'll just convert it into a list of values and disregard the key

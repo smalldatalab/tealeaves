@@ -2,12 +2,12 @@
  * Created by faisal on 3/16/15.
  */
 
-// import Ember from 'ember';
+import Ember from 'ember';
 import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global CalHeatMap */
 
-import ajax from 'ic-ajax';
+// import ajax from 'ic-ajax';
 
 function unitsSpanned(start, end, unit) {
   var s = start.clone().startOf(unit);
@@ -104,7 +104,7 @@ export default BaseMod.extend({
     }
 
     var _this = this;
-    ajax('https://eaf.smalldata.io/v1/mails/', { data: params })
+    this.get('ajax').request('https://eaf.smalldata.io/v1/mails/', { data: params })
       .then(function(data) {
         // get the number of mails sent for each time; we should also convert the times to timestamps
 

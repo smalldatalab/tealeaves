@@ -5,13 +5,13 @@
 export default function() {
   this.transition(
     this.fromRoute('info'),
-    this.toRoute('compare'),
+    this.toRoute('zcompare'),
     this.use('toLeft'),
     this.reverse('toRight')
   );
 
   this.transition(
-    this.fromRoute('compare'),
+    this.fromRoute('zcompare'),
     this.toRoute('browse'),
     this.use('toLeft'),
     this.reverse('toRight')

@@ -7,7 +7,7 @@ import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
-import ajax from 'ic-ajax';
+// import ajax from 'ic-ajax';
 
 //function negmod(n, m) {
 //  return ((n % m) + m) % m;
@@ -139,7 +139,7 @@ export default BaseMod.extend({
     }
 
     var _this = this;
-    ajax('https://eaf.smalldata.io/v1/aggregates/weekly/data/', {
+    this.get('ajax').request('https://eaf.smalldata.io/v1/aggregates/weekly/data/', {
       data: params
     })
       .then(function(data) {

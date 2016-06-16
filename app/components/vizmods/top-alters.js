@@ -2,12 +2,12 @@
  * Created by faisal on 3/16/15.
  */
 
-// import Ember from 'ember';
+import Ember from 'ember';
 import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
-import ajax from 'ic-ajax';
+// import ajax from 'ic-ajax';
 
 var emails = / ?<[^>]+>/g;
 var stripquotes = /"/g;
@@ -25,7 +25,7 @@ export default BaseMod.extend({
 
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
-    ajax('https://eaf.smalldata.io/v1/aggregates/alters/data/', { data: { start: tools.apiTZDateTime(start_date), end: tools.apiTZDateTime(end_date) } })
+    this.get('ajax').request('https://eaf.smalldata.io/v1/aggregates/alters/data/', { data: { start: tools.apiTZDateTime(start_date), end: tools.apiTZDateTime(end_date) } })
       .then(function(data) {
         // we need to collapse on the user's name after removing single-level parentheticals
         var revised_counts = tools.countBy(data.filter(function(x) { return x.address != null && x.count != null; }),

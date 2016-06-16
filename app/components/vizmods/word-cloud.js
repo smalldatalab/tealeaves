@@ -2,9 +2,9 @@
  * Created by faisal on 2/24/15.
  */
 
-// import Ember from 'ember';
+import Ember from 'ember';
 import BaseMod from 'tealeaves/components/vizmods/base-viz';
-import ajax from 'ic-ajax';
+// import ajax from 'ic-ajax';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
@@ -70,7 +70,7 @@ export default BaseMod.extend({
 
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
-    ajax('https://eaf.smalldata.io/v1/tokens/', { data: params })
+    this.get('ajax').request('https://eaf.smalldata.io/v1/tokens/', { data: params })
       .then(function(response) {
         // normalize the word counts first off
         var counts = normalizeWordCounts({}, response);

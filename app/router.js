@@ -7,7 +7,7 @@ const Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('info');
-  this.route('compare');
+  this.route('zcompare');
   this.route('browse');
   this.route('login');
   this.route('authed');

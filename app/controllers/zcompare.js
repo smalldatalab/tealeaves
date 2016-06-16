@@ -4,9 +4,11 @@
 
 import Ember from 'ember';
 import all_components from 'tealeaves/library/component-list';
+
 /* global d3 */
 
 export default Ember.Controller.extend({
+  /*
   A_title: "Half a Month Ago",
   B_title: "Last 14 Days",
   A_start_date: d3.time.week.floor(d3.time.week.offset(new Date(), -3)),
@@ -75,4 +77,5 @@ export default Ember.Controller.extend({
       this.notifyPropertyChange('filters');
     }
   }
+  */
 });

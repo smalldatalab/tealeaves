@@ -21,33 +21,32 @@ module.exports = function(defaults) {
   // along with the exports of each module as its value.
 
   app.import('bower_components/d3/d3.min.js');
-  // app.import('bower_components/bootstrap/dist/css/bootstrap.css');
-  // app.import('bower_components/bootstrap/dist/css/bootstrap-theme.css');
-  // app.import('bower_components/bootstrap/dist/css/bootstrap.css.map', { destDir: 'assets' });
-  // app.import('bower_components/bootstrap/dist/css/bootstrap-theme.css.map', { destDir: 'assets' });
   app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.eot', { destDir: 'fonts' });
   app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf', { destDir: 'fonts' });
   app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.svg', { destDir: 'fonts' });
   app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff', { destDir: 'fonts' });
-  // app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2', { destDir: 'fonts' });
+  app.import('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2', { destDir: 'fonts' });
   app.import('bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css');
+  app.import('bower_components/bootstrap/dist/js/bootstrap.js');
 
   // font-awesome
+  /*
   app.import("bower_components/font-awesome/css/font-awesome.css");
   app.import("bower_components/font-awesome/fonts/fontawesome-webfont.eot", { destDir: "fonts" });
   app.import("bower_components/font-awesome/fonts/fontawesome-webfont.svg", { destDir: "fonts" });
   app.import("bower_components/font-awesome/fonts/fontawesome-webfont.ttf", { destDir: "fonts" });
   app.import("bower_components/font-awesome/fonts/fontawesome-webfont.woff", { destDir: "fonts" });
-  app.import("bower_components/font-awesome/fonts/fontawesome-webfont.woff2", { destDir: "fonts" });
+  // app.import("bower_components/font-awesome/fonts/fontawesome-webfont.woff2", { destDir: "fonts" });
   app.import("bower_components/font-awesome/fonts/FontAwesome.otf", { destDir: "fonts" });
-  app.import('bower_components/bootstrap/dist/js/bootstrap.js');
+  */
+
 
   // jq/boostrap plugins
   app.import('bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js');
   app.import('bower_components/jquery-sortable/source/js/jquery-sortable-min.js');
 
   // time manipulation plugins
-  app.import('bower_components/momentjs/moment.js');
+  app.import('bower_components/moment/moment.js');
   // app.import('bower_components/moment-timezone/builds/moment-timezone-with-data.min.js');
   app.import('bower_components/humanize-duration/humanize-duration.js');
 

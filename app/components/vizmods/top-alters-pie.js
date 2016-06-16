@@ -8,7 +8,7 @@ import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 /* global d3pie */
 
-import ajax from 'ic-ajax';
+// import ajax from 'ic-ajax';
 
 var emails = / ?<[^>]+>/g;
 var stripquotes = /"/g;
@@ -26,7 +26,7 @@ export default BaseMod.extend({
 
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
-    ajax('https://eaf.smalldata.io/v1/aggregates/alters/data/', { data: { start: tools.apiTZDateTime(start_date), end: tools.apiTZDateTime(end_date) } })
+    this.get('ajax').request('https://eaf.smalldata.io/v1/aggregates/alters/data/', { data: { start: tools.apiTZDateTime(start_date), end: tools.apiTZDateTime(end_date) } })
       .then(function(data) {
         /*
         var total_mails = d3.sum(data, function(x) { return x.count; });

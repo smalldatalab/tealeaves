@@ -19,13 +19,13 @@ module.exports = function(environment) {
     },
 
     contentSecurityPolicy: {
-        'default-src': "'none'",
-        'script-src': "'self'",
-        'font-src': "'self' http://fonts.gstatic.com", // Allow fonts to be loaded from http://fonts.gstatic.com
-        'connect-src': "'self' http://eaf.smalldata.io",
-        'img-src': "'self'",
-        'style-src': "'self' 'unsafe-inline' http://fonts.googleapis.com", // Allow inline styles and loaded CSS from http://fonts.googleapis.com
-        'media-src': "'self'"
+      'default-src': "'none'",
+      'script-src': "'self'",
+      'font-src': "'self' http://fonts.gstatic.com", // Allow fonts to be loaded from http://fonts.gstatic.com
+      'connect-src': "'self' http://eaf.smalldata.io",
+      'img-src': "'self'",
+      'style-src': "'self' 'unsafe-inline' http://fonts.googleapis.com", // Allow inline styles and loaded CSS from http://fonts.googleapis.com
+      'media-src': "'self'"
     }
   };
 
@@ -54,16 +54,17 @@ module.exports = function(environment) {
   }
 
   ENV['ember-simple-auth'] = {
-      authenticationRoute: 'login'
+    authenticationRoute: 'login'
   };
 
   ENV['torii'] = {
-      providers: {
-          'eaf-oauth2': {
-              apiKey: '26a5a24e-927d-413d-b389-bc1c89df15da',
-              redirectUri: 'http://tealeaves.smalldata.io/authed'
-          }
+    providers: {
+      'eaf-oauth2': {
+        // note that this is the 'tealeaves local' API
+        apiKey: '8786a7cd-7444-4e5b-b675-da6cf3e07186',
+        redirectUri: 'http://localhost:4200/authed'
       }
+    }
   };
 
   return ENV;

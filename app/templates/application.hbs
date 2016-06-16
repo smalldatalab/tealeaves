@@ -15,9 +15,18 @@
             <ul class="nav navbar-nav">
                 <li>{{#link-to 'info' }}About{{/link-to}}</li>
                 <li>{{#link-to 'login' }}Connect{{/link-to}}</li>
-                <li>{{#link-to 'compare' }}Compare{{/link-to}}</li>
+                <li>{{#link-to 'zcompare' }}Compare{{/link-to}}</li>
                 <li>{{#link-to 'browse' }}Browse{{/link-to}}</li>
             </ul>
+
+            <p class="login-blurb navbar-text navbar-right">
+            {{#if session.isAuthenticated}}
+                signed in as Mark Otto
+                <a {{action 'invalidateSession'}}>Logout</a>
+            {{else}}
+              {{#link-to 'login'}}Login{{/link-to}}
+            {{/if}}
+            </p>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
