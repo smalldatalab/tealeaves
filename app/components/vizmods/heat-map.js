@@ -2,7 +2,7 @@
  * Created by faisal on 3/16/15.
  */
 
-import Ember from 'ember';
+// import Ember from 'ember';
 import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global CalHeatMap */

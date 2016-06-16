@@ -12,7 +12,7 @@ Router.map(function() {
   this.route('login');
   this.route('authed');
 
-  this.route('andomtest');
+  this.route('dummyrequest', { path: '/dumb' });
 });
 
 export default Router;

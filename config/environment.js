@@ -13,6 +13,10 @@ module.exports = function(environment) {
       }
     },
 
+    extras: {
+      eafBase: 'http://eaf.smalldata.io/v1'
+    },
+
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created

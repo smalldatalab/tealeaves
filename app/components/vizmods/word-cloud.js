@@ -2,7 +2,7 @@
  * Created by faisal on 2/24/15.
  */
 
-import Ember from 'ember';
+// import Ember from 'ember';
 import BaseMod from 'tealeaves/components/vizmods/base-viz';
 // import ajax from 'ic-ajax';
 import tools from 'tealeaves/library/toolkit';

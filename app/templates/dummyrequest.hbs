@@ -1,0 +1,13 @@
+<h1>API Testing Page</h1>
+
+<p>
+    This is a testing page for the EAF
+</p>
+
+<hr />
+
+{{#if session.isAuthenticated}}
+    <p><button class="btn btn-lg" {{ action 'ping-eaf' }}>Ping the EAF</button></p>
+{{else}}
+    <p>You're not connected!</p>
+{{/if}}
