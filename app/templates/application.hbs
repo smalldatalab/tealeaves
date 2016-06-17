@@ -21,10 +21,10 @@
 
             <p class="login-blurb navbar-text navbar-right">
             {{#if session.isAuthenticated}}
-                signed in as Mark Otto
-                <a {{action 'invalidateSession'}}>Logout</a>
+                connected as {{ session.data.authenticated.userEmail }}
+                <a {{action 'disconnect-eaf'}}>disconnect</a>
             {{else}}
-              {{#link-to 'login'}}Login{{/link-to}}
+                <a {{action 'connect-eaf'}}>connect to the EAF</a>
             {{/if}}
             </p>
         </div><!--/.nav-collapse -->

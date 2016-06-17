@@ -8,17 +8,15 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   session: Ember.inject.service('session'),
   ajax: Ember.inject.service('ajax'),
+  eaf_api: Ember.inject.service('eaf-api'),
+
   model: function() {
     return this.get('component_list');
   },
   afterModel: function() {
     // just ping the server to make sure we're really connected
     console.log("right before routes:compare:authorize...");
-    this.get('session').authorize('authorizer:oauth2', (headerName, headerValue) => {
-      const headers = {};
-      headers[headerName] = headerValue;
-      this.get('ajax').request('http://eaf.smalldata.io/v1/ping', { headers: { headers } });
-    });
+    this.get('eaf_api').ping(this);
   },
   component_list: []
 });

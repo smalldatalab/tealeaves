@@ -40,10 +40,13 @@ export default Base.extend({
    @public
    */
   authorize(data, block) {
-    const accessToken = data['access_token'];
+    const accessToken = data['authorizationToken']['access_token'];
 
     if (!isEmpty(accessToken)) {
-      block('Authorization', `Bearer ${accessToken}`);
+      return block('Authorization', `Bearer ${accessToken}`);
+    }
+    else {
+      console.warn("No access token found in session data: ", data);
     }
   }
 });

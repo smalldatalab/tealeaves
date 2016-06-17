@@ -17,11 +17,13 @@ p { line-height: 150%; font-size: larger; }
 
 hr.spanning-hr { width: 100%; border-color: #ccc; }
 
-p.login-blurb {
-  color: #eee;
-
+p.login-blurb.navbar-text {
+  color: #ccc;
+  font-size: 15px;
 }
 
 p.login-blurb a {
+  padding-left: 0.5em;
+  cursor: pointer;
   color: white;
 }
