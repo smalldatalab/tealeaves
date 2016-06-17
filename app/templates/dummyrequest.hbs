@@ -7,7 +7,15 @@
 <hr />
 
 {{#if session.isAuthenticated}}
-    <p><button class="btn btn-lg" {{ action 'ping-eaf' }}>Ping the EAF</button></p>
+    <p>You're connected!</p>
 {{else}}
     <p>You're not connected!</p>
 {{/if}}
+
+<p>
+    <button class="btn btn-lg" {{ action 'ping-eaf' }}>Ping the EAF</button>
+    <button class="btn btn-lg" {{ action 'authed-ping-eaf' }}>Authed-ping the EAF</button>
+    <button class="btn btn-lg" {{ action 'lib-ping-eaf' }}>Library-ping the EAF</button>
+    <button class="btn btn-lg" {{ action 'log-session' }}>Log Session Data</button>
+</p>
+

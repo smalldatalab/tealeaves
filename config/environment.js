@@ -39,6 +39,16 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+
+    ENV['torii'] = {
+      providers: {
+        'eaf-oauth2': {
+          // note that this is the 'tealeaves local' API
+          apiKey: '8786a7cd-7444-4e5b-b675-da6cf3e07186',
+          redirectUri: 'http://localhost:4200/authed'
+        }
+      }
+    };
   }
 
   if (environment === 'test') {
@@ -54,21 +64,19 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
+    ENV['torii'] = {
+      providers: {
+        'eaf-oauth2': {
+          // note that this is the 'tealeaves' API
+          apiKey: '26a5a24e-927d-413d-b389-bc1c89df15da',
+          redirectUri: 'http://tealeaves.smalldata.io/authed'
+        }
+      }
+    };
   }
 
   ENV['ember-simple-auth'] = {
     authenticationRoute: 'login'
-  };
-
-  ENV['torii'] = {
-    providers: {
-      'eaf-oauth2': {
-        // note that this is the 'tealeaves local' API
-        apiKey: '8786a7cd-7444-4e5b-b675-da6cf3e07186',
-        redirectUri: 'http://localhost:4200/authed'
-      }
-    }
   };
 
   return ENV;

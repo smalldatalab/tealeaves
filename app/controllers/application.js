@@ -4,7 +4,10 @@ export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
 
   actions: {
-    invalidateSession() {
+    'connect-eaf': function() {
+      this.transitionToRoute('login');
+    },
+    'disconnect-eaf': function() {
       this.get('session').invalidate();
     }
   }
