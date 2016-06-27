@@ -4,7 +4,7 @@
       {{#each alters as |person|}}
           <div class="row">
               <div class="col-md-6">
-                {{person.id}}. {{ person.name }}
+                {{person.idx}}. {{ person.name }}
               </div>
               <div class="col-md-6">
                   {{ bootstrap-progressbar value=person.count maxvalue=total_mails }}

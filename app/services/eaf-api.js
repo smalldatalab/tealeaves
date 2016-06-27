@@ -12,7 +12,7 @@ export default Ember.Service.extend({
     // 15:30 < jaawerth> diphtherial: so basically, wrap the header-getting bit in a Promise that resolves to the headers object you created,
     // then you can do gotHeaders.then(function(headers) { return me.get('ajax').request(bleh, { method, headers }); })
 
-    return new Promise(function(resolve, reject) {
+    return new Ember.RSVP.Promise(function(resolve, reject) {
       me.get('session').authorize('authorizer:eaf-oauth2', function(headerName, headerValue) {
         const headers = {};
         headers[headerName] = headerValue;

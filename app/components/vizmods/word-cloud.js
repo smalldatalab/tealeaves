@@ -4,7 +4,6 @@
 
 // import Ember from 'ember';
 import BaseMod from 'tealeaves/components/vizmods/base-viz';
-// import ajax from 'ic-ajax';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
@@ -58,9 +57,8 @@ export default BaseMod.extend({
     this.$(".loader").show();
 
     var params = {
-      'min_date': tools.apiTZDateTime(start_date),
-      'max_date': tools.apiTZDateTime(end_date),
-      'nonpaged': true
+      min_date: tools.apiTZDateTime(start_date),
+      max_date: tools.apiTZDateTime(end_date)
     };
 
     if (filters && filters.hasOwnProperty('alter')) {
@@ -70,10 +68,10 @@ export default BaseMod.extend({
 
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
-    this.get('eaf_api').query('unigram', { data: params })
+    this.get('eaf_api').query('unigram', params)
       .then(function(response) {
         // normalize the word counts first off
-        var counts = normalizeWordCounts({}, response);
+        var counts = normalizeWordCounts({}, response.objects);
 
         // convert word=>counts into array of objects with keys 'word' and 'times', sorted desc on 'times'
         counts = Object.keys(counts)
@@ -81,7 +79,7 @@ export default BaseMod.extend({
         counts.sort(function(a,b) { return b.times - a.times; });
 
         // remove all the stopwords
-        counts = counts.filter(function(x) { return stopwords.indexOf(x.word.toLowerCase()) === -1; });
+        counts = counts.filter(function(x) { return x.word.length > 3 && stopwords.indexOf(x.word.toLowerCase()) === -1; });
 
         if (counts.length > 0) {
           makeCloud(counts, counts.length, _this.$(".d3box").get(0), $me.width(), $me.height(), function() {

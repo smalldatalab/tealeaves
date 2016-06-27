@@ -7,8 +7,6 @@ import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
-// import ajax from 'ic-ajax';
-
 //function negmod(n, m) {
 //  return ((n % m) + m) % m;
 //}
@@ -128,8 +126,8 @@ export default BaseMod.extend({
     var hrOffset = -(this.days_of_week[0].getTimezoneOffset()/60);
 
     var params = {
-      start: tools.apiTZDateTime(start_date),
-      end: tools.apiTZDateTime(end_date),
+      min_date: tools.apiTZDateTime(start_date),
+      max_date: tools.apiTZDateTime(end_date),
       offset: hrOffset
     };
 
@@ -139,9 +137,7 @@ export default BaseMod.extend({
     }
 
     var _this = this;
-    this.get('ajax').request('https://eaf.smalldata.io/v1/aggregates/weekly/data/', {
-      data: params
-    })
+    this.get('eaf_api').query('weekly', { data: params })
       .then(function(data) {
         // parse the totals payload
         var days = data['totals'];

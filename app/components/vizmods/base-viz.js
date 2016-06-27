@@ -7,8 +7,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   classNames: ['vizbox','unloaded'],
-  ajax: Ember.inject.service(),
-  eaf_api: Ember.inject.service('eaf-api');
+  eaf_api: Ember.inject.service('eaf-api'),
   start_date: null,
   end_date: null,
   filters: null,
@@ -21,7 +20,7 @@ export default Ember.Component.extend({
       .appendTo(this.$());
 
     // also append a broken/missing identifier
-    Ember.$('<div class="borked"><i class="fa fa-question-circle faa-flash animated"></i></div>')
+    Ember.$('<div class="borked"><i class="fa fa-question-circle"></i></div>')
       .appendTo(this.$());
 
     // animate the display of each module
@@ -46,6 +45,8 @@ export default Ember.Component.extend({
     // convert dates to moment.js moments so we can format them
     start_date = moment(start_date);
     end_date = moment(end_date);
+
+    console.log("start: ", start_date, " end: ", end_date);
 
     // set us as loading (but hide the borked icon)
     this.$().removeClass("unloaded").children().show();

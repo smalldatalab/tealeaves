@@ -7,8 +7,6 @@ import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
-// import ajax from 'ic-ajax';
-
 var emails = / ?<[^>]+>/g;
 var stripquotes = /"/g;
 var stripparens = /\([^)]*\)/g;
@@ -25,12 +23,11 @@ export default BaseMod.extend({
 
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
-    this.get('ajax').request('https://eaf.smalldata.io/v1/aggregates/alters/data/', { data: { start: tools.apiTZDateTime(start_date), end: tools.apiTZDateTime(end_date) } })
+    this.get('eaf_api').query('mail_message', { min_date: tools.apiTZDateTime(start_date), max_date: tools.apiTZDateTime(end_date) })
       .then(function(data) {
         // we need to collapse on the user's name after removing single-level parentheticals
-        var revised_counts = tools.countBy(data.filter(function(x) { return x.address != null && x.count != null; }),
-          function(k) { return k.address.replace(emails, '').replace(stripquotes, '').replace(stripparens, '').trim(); },
-          function(x) { return x.count; });
+        var revised_counts = tools.countBy(data.objects.map((x) => x.from_field),
+          function(k) { return k.replace(emails, '').replace(stripquotes, '').replace(stripparens, '').trim(); });
 
         // convert the key:value map into a [{label: <key>, value: <value>},...] array, sigh
         revised_counts = Object.keys(revised_counts).map(function (key, idx) {
@@ -39,6 +36,8 @@ export default BaseMod.extend({
 
         var total_mails = d3.max(revised_counts, function(x) { return x.count; });
         revised_counts.sort(function(a,b) { return b.count-a.count; });
+
+        revised_counts = revised_counts.map((item,idx) => { item['idx'] = idx+1; return item; });
 
         // update list that'll be reflected in this component's template immediately
         _this.set('total_mails', total_mails);

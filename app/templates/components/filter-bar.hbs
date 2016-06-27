@@ -19,9 +19,9 @@
           <div style="margin-bottom: 5px;">
             <i class="fa fa-users" style="margin: 5px;"></i> include only this alter: <i class="fa fa-circle-o-notch fa-spin alters-loader"></i><br />
 
-            <select onchange={{action (mut alter) value="target.value"}}>
-                {{#each alters as |selected_alter|}}
-                    <option value="{{selected_alter}}" selected={{eq vehicle selected_alter}}>{{selected_alter}}</option>
+            <select onchange={{action (mut selected_alter) value="target.value"}}>
+                {{#each alters as |current_alter|}}
+                    <option value="{{current_alter.value}}" selected={{eq current_alter selected_alter}}>{{current_alter.display}} ({{current_alter.value}})</option>
                 {{/each}}
             </select>
 

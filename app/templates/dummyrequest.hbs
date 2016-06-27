@@ -13,9 +13,22 @@
 {{/if}}
 
 <p>
-    <button class="btn btn-lg" {{ action 'ping-eaf' }}>Ping the EAF</button>
-    <button class="btn btn-lg" {{ action 'authed-ping-eaf' }}>Authed-ping the EAF</button>
-    <button class="btn btn-lg" {{ action 'lib-ping-eaf' }}>Library-ping the EAF</button>
-    <button class="btn btn-lg" {{ action 'log-session' }}>Log Session Data</button>
+  <h3>Action Tests</h3>
+  <button class="btn btn-lg" {{ action 'ping-eaf' }}>Ping the EAF</button>
+  <button class="btn btn-lg" {{ action 'authed-ping-eaf' }}>Authed-ping the EAF</button>
+  <button class="btn btn-lg" {{ action 'lib-ping-eaf' }}>Library-ping the EAF</button>
+  <button class="btn btn-lg" {{ action 'log-session' }}>Log Session Data</button>
 </p>
 
+<p>
+  <h3>Query Tester</h3>
+  {{input value=query_path}}
+  {{ interval-chooser start_date=query_min_date end_date=query_max_date  }}
+
+  <button class="btn" {{ action 'exec-query' }}>Exec Authed EAF Query</button>
+
+  {{#if query_loading}}<i class="fa fa-circle-o-notch fa-spin fa-fw" aria-hidden="true"></i>{{/if}}
+
+
+  <pre style="margin-top: 0.5em;">{{ query_result }}</pre>
+</p>

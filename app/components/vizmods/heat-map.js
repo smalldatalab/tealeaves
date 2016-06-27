@@ -7,7 +7,6 @@ import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global CalHeatMap */
 
-// import ajax from 'ic-ajax';
 
 function unitsSpanned(start, end, unit) {
   var s = start.clone().startOf(unit);
@@ -33,10 +32,13 @@ export default BaseMod.extend({
 
     // var prior_end = end_date.clone().subtract(1, 'day').endOf('day');
 
+    var original_start = start_date.clone();
+    var original_end = end_date.clone();
+
     // clamp start and end dates to the month to avoid awkward situations
     // (e.g. where they try to display half a month and wonder why they hadn't sent any emails before then)
     start_date.startOf('month');
-    end_date.startOf('month');
+    end_date.endOf('month');
 
     var domain = 'month', subdomain = 'x_day';
     // var duration = moment.duration(end_date.diff(start_date));
@@ -93,10 +95,12 @@ export default BaseMod.extend({
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
     var params = {
-      min_date: tools.apiTZDateTime(start_date),
-      max_date: tools.apiTZDateTime(end_date),
+      min_date: tools.apiTZDateTime(original_start),
+      max_date: tools.apiTZDateTime(original_end),
       flatten: 'sent_time'
     };
+
+    console.log("Request params: ", params);
 
     if (filters && filters.hasOwnProperty('alter')) {
       console.log("Applying alter filter: ", filters['alter']);
@@ -104,11 +108,11 @@ export default BaseMod.extend({
     }
 
     var _this = this;
-    this.get('eaf_api').query('mail_message', { data: params })
+    this.get('eaf_api').query('mail_message', params)
       .then(function(data) {
         // get the number of mails sent for each time; we should also convert the times to timestamps
 
-        var day_counts = tools.countBy(data.map(function(x) { return new Date(x).getTime()/1000; }));
+        var day_counts = tools.countBy(data.objects.map(function(x) { return new Date(x.received_on).getTime()/1000; }));
         cal.update(day_counts);
       })
       .finally(function() {

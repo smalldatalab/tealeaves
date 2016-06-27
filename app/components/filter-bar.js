@@ -3,7 +3,6 @@
  */
 
 import Ember from 'ember';
-// import ajax from 'ic-ajax';
 /* global moment */
 
 export default Ember.Component.extend({
@@ -14,7 +13,7 @@ export default Ember.Component.extend({
   isAlterTimeConstrained: true,
   // selected_alter: null,
 
-  ajax: Ember.inject.service(),
+  eaf_api: Ember.inject.service('eaf-api'),
 
   didInsertElement: function() {
     this.bind();
@@ -48,45 +47,18 @@ export default Ember.Component.extend({
     var params = {};
 
     if (this.get('isAlterTimeConstrained')) {
-      params['start'] = moment.min(moment(this.get('start_date_A')), moment(this.get('start_date_B')))
+      params['min_date'] = moment.min(moment(this.get('start_date_A')), moment(this.get('start_date_B')))
         .format("YYYY-MM-DD");
-      params['end'] = moment.max(moment(this.get('start_date_A')), moment(this.get('start_date_B')))
+      params['max_date'] = moment.max(moment(this.get('start_date_A')), moment(this.get('start_date_B')))
         .format("YYYY-MM-DD");
     }
 
     var _this = this;
-    this.get('ajax').request('https://eaf.smalldata.io/v1/aggregates/alters/data/', { data: params })
+    this.get('eaf_api').query('alter', params)
       .then(function(data) {
         // create a dictionary mapping 'displayed address' => '{ display, actual } for deduplication purposes
         // later we'll just convert it into a list of values and disregard the key
-        var alters = data.reduce(function(acc, x) {
-          var addr = x.address;
-
-          // if there's no address at all, just continue
-          if (addr == null || addr.trim() === "") { return acc; }
-
-          // first, we want to split multiple addresses into multiple people
-          // we do a little preprocessing to remove weird characters and make it easier to just format the thing
-          var addresses = parseMails(addr);
-
-          // it can either be a plain address or a name with an address following in parens (used to be brackets)
-          // either way we're going to handle them the same
-          addresses.forEach(function(x) {
-            // if it's not already there, add it with formatting and junk
-            if (x.indexOf("unknown.email") === -1 && !acc.hasOwnProperty(x)) {
-              var trans_addr = x
-                .replace("\r\n","")
-                .replace("\"", "").replace("\"", "").replace("\"","") // i know they look the same, but they're not
-                .replace("\'", "")
-                .replace("<","&lt;").replace(">","&gt;")
-                .trim();
-
-              acc[x] = { display: trans_addr, value: x };
-            }
-          });
-
-          return acc;
-        }, {});
+        var alters = data.objects.map((x) => ({ display: x.name, value: x.email }));
 
         var sorted_alters = Object.keys(alters)
           .map(function(x) { return alters[x]; })
@@ -101,37 +73,3 @@ export default Ember.Component.extend({
       });
   }
 });
-
-/**
- * Splits a string of comma-delimited complex email addresses into an array of strings
- * @param addr the string of addresses, e.g. from an email 'to' field
- */
-function parseMails(addr) {
-  var state = 0; // start outside any quoted strings
-  var lastComma = 0;
-  var accum = [];
-
-  for (var i = 0; i < addr.length; i++) {
-    var c = addr[i];
-
-    switch (state) {
-      case 0: // outside a quoted string
-        if (c === '\"') { state = 1; }
-        if (c === ',') {
-          accum.push(addr.substr(lastComma, i-lastComma).trim());
-          lastComma = i+1;
-        }
-        break;
-      case 1: // within a quoted string
-        if (c === '\"') { state = 0; }
-        break;
-    }
-  }
-
-  // FIXME: we should probably complain if we don't end up in state 0
-
-  // push the final bit
-  accum.push(addr.substr(lastComma, addr.length-lastComma).trim());
-
-  return accum;
-}

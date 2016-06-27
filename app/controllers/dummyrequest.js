@@ -3,17 +3,23 @@
  */
 
 import Ember from 'ember';
+import tools from 'tealeaves/library/toolkit';
 // import LoginControllerMixin from 'ember-simple-auth/mixins/login-controller-mixin';
+
+/* global moment */
 
 export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
   ajax: Ember.inject.service('ajax'),
   eaf_api: Ember.inject.service('eaf-api'),
+  query_min_date: null,
+  query_max_date: null,
 
   actions: {
     'log-session': function() {
       console.log(this.get('session.data'));
     },
+
     'ping-eaf': function() {
       var token = this.get('session.data.authenticated.authorizationToken.access_token');
       this.get('ajax').request('http://eaf.smalldata.io/v1/ping', { data: { hello: 'hi' }, headers: { Authorization: 'Bearer ' + token } })
@@ -21,6 +27,7 @@ export default Ember.Controller.extend({
           console.log(response);
         });
     },
+
     'authed-ping-eaf': function() {
       var me = this;
 
@@ -40,6 +47,7 @@ export default Ember.Controller.extend({
           });
       });
     },
+
     'lib-ping-eaf': function() {
       this.get('eaf_api').query('ping')
         .then((response) => {
@@ -49,6 +57,24 @@ export default Ember.Controller.extend({
           console.error("ERROR!: ", error);
           this.get('session').invalidate();
           this.transitionToRoute('login');
+        });
+    },
+
+    'exec-query': function() {
+      this.set('query_loading', true);
+
+      this.get('eaf_api').query(this.get('query_path'), {
+        min_date: tools.apiTZDateTime(moment(this.get('query_min_date'))),
+        max_date: tools.apiTZDateTime(moment(this.get('query_max_date')))
+      })
+        .then((response) => {
+          this.set('query_result', JSON.stringify(response, null, 2));
+          this.set('query_loading', false);
+        })
+        .catch((error) => {
+          console.error("ERROR!: ", error);
+          this.set('query_result', "ERROR: " + error);
+          this.set('query_loading', false);
         });
     }
   }
