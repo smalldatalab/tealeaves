@@ -104,7 +104,7 @@ export default BaseMod.extend({
     }
 
     var _this = this;
-    this.get('ajax').request('https://eaf.smalldata.io/v1/mails/', { data: params })
+    this.get('eaf_api').query('mail_message', { data: params })
       .then(function(data) {
         // get the number of mails sent for each time; we should also convert the times to timestamps
 

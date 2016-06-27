@@ -70,7 +70,7 @@ export default BaseMod.extend({
 
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
-    this.get('ajax').request('https://eaf.smalldata.io/v1/tokens/', { data: params })
+    this.get('eaf_api').query('unigram', { data: params })
       .then(function(response) {
         // normalize the word counts first off
         var counts = normalizeWordCounts({}, response);
