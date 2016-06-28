@@ -82,6 +82,7 @@ export default Ember.Component.extend({
    */
   bindAlters: function() {
     this.$(".alters-loader").show();
+    this.set('selected_alter', null);
 
     var params = {};
 
