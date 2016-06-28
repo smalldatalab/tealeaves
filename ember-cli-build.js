@@ -44,6 +44,9 @@ module.exports = function(defaults) {
   // jq/boostrap plugins
   app.import('bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js');
   app.import('bower_components/jquery-sortable/source/js/jquery-sortable-min.js');
+  app.import('bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js');
+  // app.import('bower_components/bootstrap-select/dist/js/bootstrap-select.min.js');
+  // app.import('bower_components/bootstrap-select/dist/css/bootstrap-select.min.css');
 
   // time manipulation plugins
   app.import('bower_components/moment/moment.js');

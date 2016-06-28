@@ -27,9 +27,10 @@ export default Ember.Service.extend({
   },
 
   ping: function(source) {
-    this.query('ping').catch(function(error) {
+    this.query('ping').catch((error) => {
       console.log("Ping failed: ", error, "invalidating and logging in...");
-      this.get('session').invalidate();
+      var session = this.get('session');
+      if (session) { session.invalidate(); }
       source.transitionToLoginRoute();
     });
   }

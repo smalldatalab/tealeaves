@@ -113,10 +113,11 @@ export default BaseMod.extend({
     this.$(".loader").show();
 
     // ensure the calendar itself exists
-    if (!this.loadedCalendar) {
-      this.generateCalendar();
-      this.loadedCalendar = true;
-    }
+    // CHANGED: replaced with a static definition of the calendar, since it never actually changes
+    // if (!this.loadedCalendar) {
+    //   this.generateCalendar();
+    //   this.loadedCalendar = true;
+    // }
 
     /*
     var zone = this.get('selected_timezone');

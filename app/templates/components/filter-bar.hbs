@@ -1,14 +1,3 @@
-<!--<hr class="spanning-hr"/>-->
-
-<!--<div class="container-fluid">-->
-    <!--<div class="row">-->
-        <!--<div class="col-md-12"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> <b>filters:</b></div>-->
-    <!--</div>-->
-    <!--<div class="row">-->
-        <!--include only this alter:-->
-    <!--</div>-->
-<!--</div>-->
-
 <div class="panel panel-default">
     <!-- Default panel contents -->
     <div class="panel-heading module_title"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> <a {{ action 'toggleFilters' }}>Filters</a></div>
@@ -16,44 +5,22 @@
     <!-- List group -->
     <ul class="list-group filter-items" style="display: none;">
         <li class="list-group-item">
-          <div style="margin-bottom: 5px;">
-            <i class="fa fa-users" style="margin: 5px;"></i> include only this alter: <i class="fa fa-circle-o-notch fa-spin alters-loader"></i><br />
-
-            <select onchange={{action (mut selected_alter) value="target.value"}}>
-                {{#each alters as |current_alter|}}
-                    <option value="{{current_alter.value}}" selected={{eq current_alter selected_alter}}>{{current_alter.display}} ({{current_alter.value}})</option>
-                {{/each}}
-            </select>
-
-            {{!--
-              {{ view "select"
-              content=alters
-              value=selected_alter
-              prompt="(all alters)"
-              optionValuePath="content.value"
-              optionLabelPath="content.display"
-              }}
-            --}}
-          </div>
-          <div>
-              <label style="font-weight: normal;">
-              {{input type="checkbox" name="constrain_to_timerange" checked=isAlterTimeConstrained}}
-              constrain alter list to current times
-              </label>
-          </div>
-
-          <div style="margin-top: 5px;"><b>Selected:</b> {{ selected_alter }}</div>
+            {{ filters/alter-filter
+              params=master_params
+              start_date_A=start_date_A end_date_A=end_date_A
+              start_date_B=start_date_B end_date_B=end_date_B
+            }}
         </li>
 
-        <!--<li class="list-group-item">-->
-            <!--<div style="display: flex;">-->
-              <!--<div style="flex: 1 0;">-->
-                  <!--&nbsp;-->
-              <!--</div>-->
-              <!--<div style="flex: 0 1 200px; text-align: right;">-->
-                  <!--<button {{action 'applyFilter'}}>Apply Filters</button>-->
-              <!--</div>-->
-            <!--</div>-->
-        <!--</li>-->
+        <li class="list-group-item filter-acceptor">
+            <div style="display: flex;">
+                <div style="flex: 1 0;">
+                    {{ filter_repr }}
+                </div>
+                <div style="flex: 0 1 200px; text-align: right;">
+                    <button class="btn btn-default" {{action 'applyFilter'}}><span class="glyphicon glyphicon-ok" style="margin-right: 0.25em;" aria-hidden="true"></span> Apply Filters</button>
+                </div>
+            </div>
+        </li>
     </ul>
 </div>
