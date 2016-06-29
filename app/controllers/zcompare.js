@@ -72,7 +72,7 @@ export default Ember.Controller.extend({
     },
     updateFilter: function(filters) {
       this.set('filters', filters);
-      // console.log("Updated filter?: ", this.get('filters'));
+      console.log("Updated filter?: ", this.get('filters'));
       this.notifyPropertyChange('filters');
     }
   }

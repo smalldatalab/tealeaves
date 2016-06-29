@@ -15,10 +15,10 @@
         <li class="list-group-item filter-acceptor">
             <div style="display: flex;">
                 <div style="flex: 1 0;">
-                    {{ filter_repr }}
+                  {{ filter_repr }}
                 </div>
                 <div style="flex: 0 1 200px; text-align: right;">
-                    <button class="btn btn-default" {{action 'applyFilter'}}><span class="glyphicon glyphicon-ok" style="margin-right: 0.25em;" aria-hidden="true"></span> Apply Filters</button>
+                    <button class="btn btn-default {{ if dirty 'apply-btn-dirty btn-info' }}" {{action 'applyFilter'}}><span class="glyphicon glyphicon-ok" style="margin-right: 0.25em;" aria-hidden="true"></span> Apply Filters</button>
                 </div>
             </div>
         </li>

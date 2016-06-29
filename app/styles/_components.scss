@@ -77,7 +77,7 @@ button.shift_control[disabled="true"] {
 
 // calendar heatmap
 .heat-map {
-  overflow: visible;
+  overflow: scroll;
   .subdomain-text {
     fill: #333;
     font-size: 11px;

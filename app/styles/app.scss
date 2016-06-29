@@ -32,6 +32,22 @@ p.login-blurb a {
 .filter-acceptor {
   box-shadow: inset 0px 5px 2px rgba(0,0,0,0.025); background-color: #fafafa;
 }
+.apply-btn-dirty {
+  animation-duration: 600ms;
+  animation-name: flashblue;
+  animation-iteration-count: 1;
+
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+
+@keyframes flashblue {
+  from { background: #ccf6ff; }
+  to {
+    background-color: #5bc0de;
+    border-color: #46b8da;
+  }
+}
 
 // alter filter styles
 .whiteblack-lists-container {
@@ -47,9 +63,11 @@ p.login-blurb a {
   line-height: 120%;
 }
 
-.whiteblack-lists-container .alter-list:last-child {
+.whiteblack-lists-container .alter-list.blacklist {
   border-left: solid 1px #ccc;
   padding-left: 10px;
+  background: #333;
+  color: white;
 }
 
 .whiteblack-lists-container .alter-list li {

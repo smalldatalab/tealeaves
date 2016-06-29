@@ -63,10 +63,21 @@ export default Ember.Controller.extend({
     'exec-query': function() {
       this.set('query_loading', true);
 
-      this.get('eaf_api').query(this.get('query_path'), {
-        min_date: tools.apiTZDateTime(moment(this.get('query_min_date'))),
-        max_date: tools.apiTZDateTime(moment(this.get('query_max_date')))
-      })
+      var params = {};
+
+      if (this.get('useDateRange')) {
+          params['min_date'] = tools.apiTZDateTime(moment(this.get('query_min_date')));
+          params['max_date'] = tools.apiTZDateTime(moment(this.get('query_max_date')));
+      }
+
+      if (this.get('extraParams')) {
+        for (var x of this.get('extraParams').split("&")) {
+          var parts = x.split("=");
+          params[parts[0]] = parts[1];
+        }
+      }
+
+      this.get('eaf_api').query(this.get('query_path'), params)
         .then((response) => {
           this.set('query_result', JSON.stringify(response, null, 2));
           this.set('query_loading', false);

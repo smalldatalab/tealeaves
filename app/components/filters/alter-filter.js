@@ -36,14 +36,16 @@ export default Ember.Component.extend({
   selected_alter_blacklist: function() {
     return this.get('selected_alter_list').blacklist();
   }.property('selected_alter_list'),
+  min_sent: 0,
 
   updateMasterParams: function() {
     var alterlist = this.get('selected_alter_list');
     this.set('params', { alters: {
       whitelist: alterlist.whitelist(),
-      blacklist: alterlist.blacklist()
+      blacklist: alterlist.blacklist(),
+      min_sent: this.get('min_sent')
     }});
-  }.observes('selected_alter_list'),
+  }.observes('selected_alter_list', 'min_sent'),
 
   // lifecycle event handlers
   actions: {

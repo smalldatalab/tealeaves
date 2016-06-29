@@ -23,7 +23,12 @@
 <p>
   <h3>Query Tester</h3>
   {{input value=query_path}}
-  {{ interval-chooser start_date=query_min_date end_date=query_max_date  }}
+
+  <div>
+  {{ input type="checkbox" name="useDateRange" checked=useDateRange }}
+  {{ interval-chooser start_date=query_min_date end_date=query_max_date }}
+  {{ input type="text" name="extraParams" value=extraParams }}
+  </div>
 
   <button class="btn" {{ action 'exec-query' }}>Exec Authed EAF Query</button>
 

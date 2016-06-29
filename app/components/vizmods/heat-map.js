@@ -68,12 +68,12 @@ export default BaseMod.extend({
       start: start_date.toDate(),
       weekStartOnMonday: false,
       range: range,
-      legend: [2,4,6,8,10],
+      legend: [2,4,8,16,32],
       legendColors: ["#D5ECFF", "#2A5DB1"],
       domainGutter: 6,
       domainMargin: 1,
-      cellSize: 15,
-      legendCellSize: 15,
+      cellSize: 18,
+      legendCellSize: 18,
       tooltip: true,
       // highlight: d3.time.day.range(start_date.toDate(), end_date.toDate()),
       label: {
@@ -102,9 +102,13 @@ export default BaseMod.extend({
 
     console.log("Request params: ", params);
 
-    if (filters && filters.hasOwnProperty('alter')) {
-      console.log("Applying alter filter: ", filters['alter']);
-      params['to_addr'] = filters['alter'];
+    if (filters && filters.hasOwnProperty('alters')) {
+      console.log("Applying alter filter: ", filters['alters']);
+      params['whitelist'] = JSON.stringify(filters['alters']['whitelist']);
+      params['blacklist'] = JSON.stringify(filters['alters']['blacklist']);
+      if ('min_sent' in filters['alters']) {
+        params['min_sent'] = filters['alters']['min_sent'];
+      }
     }
 
     var _this = this;

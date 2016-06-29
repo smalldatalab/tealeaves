@@ -109,6 +109,7 @@ export default BaseMod.extend({
   },
 
   bind: function(start_date, end_date, filters) {
+    /*
     // display the spinner
     this.$(".loader").show();
 
@@ -119,10 +120,8 @@ export default BaseMod.extend({
     //   this.loadedCalendar = true;
     // }
 
-    /*
-    var zone = this.get('selected_timezone');
-    var hrOffset = (zone != null)?zone.offset:2;
-    */
+    // var zone = this.get('selected_timezone');
+    // var hrOffset = (zone != null)?zone.offset:2;
 
     var hrOffset = -(this.days_of_week[0].getTimezoneOffset()/60);
 
@@ -132,9 +131,13 @@ export default BaseMod.extend({
       offset: hrOffset
     };
 
-    if (filters && filters.hasOwnProperty('alter')) {
-      console.log("Applying alter filter: ", filters['alter']);
-      params['alter'] = filters['alter'];
+    if (filters && filters.hasOwnProperty('alters')) {
+      console.log("Applying alter filter: ", filters['alters']);
+      params['whitelist'] = JSON.stringify(filters['alters']['whitelist']);
+      params['blacklist'] = JSON.stringify(filters['alters']['blacklist']);
+      if ('min_sent' in filters['alters']) {
+        params['min_sent'] = filters['alters']['min_sent'];
+      }
     }
 
     var _this = this;
@@ -172,7 +175,7 @@ export default BaseMod.extend({
         _this.$(".loader").hide();
       });
 
-
-    // this.$(".loader").hide();
+    */
+    this.$(".loader").hide();
   }
 });

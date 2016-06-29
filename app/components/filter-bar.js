@@ -7,9 +7,14 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   classNames: ['filter-bar'],
   master_params: {},
+  dirty: false,
   filter_repr: function() {
     return JSON.stringify(this.get('master_params'));
   }.property('master_params'),
+
+  masterDirty: function() {
+    this.set('dirty', true);
+  }.observes('master_params'),
 
   actions: {
     'toggleFilters': function() {
@@ -17,6 +22,7 @@ export default Ember.Component.extend({
     },
     'applyFilter': function() {
       this.sendAction('action', this.get('master_params'));
+      this.set('dirty', false);
     }
   }
 });

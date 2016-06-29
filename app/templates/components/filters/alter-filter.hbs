@@ -4,7 +4,7 @@
 
         <!-- user whitelist/blacklist listview -->
         <div class="whiteblack-lists-container">
-            <div class="alter-list">
+            <div class="alter-list whitelist">
               <b>Whitelisted Names:</b>
               <ul>
                 {{#each selected_alter_whitelist as |key|}}
@@ -12,7 +12,7 @@
                 {{/each}}
               </ul>
             </div>
-            <div class="alter-list">
+            <div class="alter-list blacklist">
               <b>Blacklisted Names:</b>
               <ul>
               {{#each selected_alter_blacklist as |key|}}
@@ -35,10 +35,18 @@
       <button class="btn" {{action 'add-alter-to-list' selected_alter true}}>Add to Whitelist</button>
       <button class="btn" {{action 'add-alter-to-list' selected_alter false}}>Add to Blacklist</button>
     </div>
+
     <div>
         <label style="font-weight: normal;">
           {{input type="checkbox" name="constrain_to_timerange" checked=isAlterTimeConstrained}}
             constrain alter list to current times
+        </label>
+    </div>
+
+    <div>
+        <label style="font-weight: normal;">
+          minimum emails sent to this alter:
+          {{input type="number" min="0" width="4" name="min_sent" value=min_sent}}
         </label>
     </div>
 </li>
