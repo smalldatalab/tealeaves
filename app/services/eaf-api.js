@@ -31,7 +31,7 @@ export default Ember.Service.extend({
       console.log("Ping failed: ", error, "invalidating and logging in...");
       var session = this.get('session');
       if (session) { session.invalidate(); }
-      source.transitionToLoginRoute();
+      source.transitionTo('login');
     });
   }
 });
