@@ -61,14 +61,7 @@ export default BaseMod.extend({
       max_date: tools.apiTZDateTime(end_date)
     };
 
-    if (filters && filters.hasOwnProperty('alters')) {
-      console.log("Applying alter filter: ", filters['alters']);
-      params['whitelist'] = JSON.stringify(filters['alters']['whitelist']);
-      params['blacklist'] = JSON.stringify(filters['alters']['blacklist']);
-      if ('min_sent' in filters['alters']) {
-        params['min_sent'] = filters['alters']['min_sent'];
-      }
-    }
+    this.applyAlterFilter(filters, params);
 
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves

@@ -16,15 +16,22 @@ export default BaseMod.extend({
   classNames: ['top-alters-pie'],
   alters: [],
   total_mails: 0,
-  bind: function(start_date, end_date) {
+  bind: function(start_date, end_date, filters) {
     var _this = this;
 
     // display the spinner
     this.$(".loader").show();
 
+    var params = {
+      min_date: tools.apiTZDateTime(start_date),
+      max_date: tools.apiTZDateTime(end_date)
+    };
+
+    this.applyAlterFilter(filters, params);
+
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
-    this.get('eaf_api').query('mail_message', { min_date: tools.apiTZDateTime(start_date), max_date: tools.apiTZDateTime(end_date) })
+    this.get('eaf_api').query('mail_message', params)
       .then(function(data) {
         /*
         var total_mails = d3.sum(data, function(x) { return x.count; });

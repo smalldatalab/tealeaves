@@ -97,19 +97,9 @@ export default BaseMod.extend({
     var params = {
       min_date: tools.apiTZDateTime(original_start),
       max_date: tools.apiTZDateTime(original_end),
-      flatten: 'sent_time'
     };
 
-    console.log("Request params: ", params);
-
-    if (filters && filters.hasOwnProperty('alters')) {
-      console.log("Applying alter filter: ", filters['alters']);
-      params['whitelist'] = JSON.stringify(filters['alters']['whitelist']);
-      params['blacklist'] = JSON.stringify(filters['alters']['blacklist']);
-      if ('min_sent' in filters['alters']) {
-        params['min_sent'] = filters['alters']['min_sent'];
-      }
-    }
+    this.applyAlterFilter(filters, params);
 
     var _this = this;
     this.get('eaf_api').query('mail_message', params)

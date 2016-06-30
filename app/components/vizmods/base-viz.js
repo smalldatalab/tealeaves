@@ -30,6 +30,17 @@ export default Ember.Component.extend({
     this._prebind();
   },
 
+  // convenience method to inject filter params for alters into a params collection
+  applyAlterFilter(filters, params) {
+    if (filters && filters.hasOwnProperty('alters')) {
+      params['whitelist'] = JSON.stringify(filters['alters']['whitelist']);
+      params['blacklist'] = JSON.stringify(filters['alters']['blacklist']);
+      if ('min_sent' in filters['alters']) {
+        params['min_sent'] = filters['alters']['min_sent'];
+      }
+    }
+  },
+
   _prebind: function() {
     var start_date = this.get('start_date');
     var end_date = this.get('end_date');
@@ -45,8 +56,6 @@ export default Ember.Component.extend({
     // convert dates to moment.js moments so we can format them
     start_date = moment(start_date);
     end_date = moment(end_date);
-
-    console.log("start: ", start_date, " end: ", end_date);
 
     // set us as loading (but hide the borked icon)
     this.$().removeClass("unloaded").children().show();
