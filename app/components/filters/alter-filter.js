@@ -91,7 +91,7 @@ export default Ember.Component.extend({
     if (this.get('isAlterTimeConstrained')) {
       params['min_date'] = moment.min(moment(this.get('start_date_A')), moment(this.get('start_date_B')))
         .format("YYYY-MM-DD");
-      params['max_date'] = moment.max(moment(this.get('start_date_A')), moment(this.get('start_date_B')))
+      params['max_date'] = moment.max(moment(this.get('end_date_A')), moment(this.get('end_date_B')))
         .format("YYYY-MM-DD");
     }
 

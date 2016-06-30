@@ -57,7 +57,7 @@ export default Ember.Component.extend({
     if (s != null && e != null) {
       var sm = moment(s), em = moment(d3.time.day.round(e));
       var duration = Math.abs(sm.valueOf() - (em.valueOf()));
-      return humanizeDuration(duration, { units: ["weeks", "days", "hours"] });
+      return humanizeDuration(duration, { units: ["w", "d", "h"] });
     }
 
     return "(no interval selected)";
