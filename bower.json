@@ -6,16 +6,15 @@
     "ember-cli-test-loader": "0.2.2",
     "ember-qunit-notifications": "0.1.0",
     "bootstrap": "~3.3.4",
-    "d3": "^3.5.17",
     "moment": "momentjs#^2.13.0",
     "font-awesome": "~4.5.0",
-    "d3-cloud": "^1.2.1",
     "humanize-duration": "^3.9.0",
-    "d3pie": "^0.1.9",
-    "cal-heatmap": "^3.6.0",
     "font-awesome-animation": "^0.0.9",
     "bootstrap-datepicker": "^1.6.1",
     "jquery-sortable": "^0.9.13",
-    "d3-time-format": "^2.0.0"
+    "d3pie": "^0.1.9",
+    "cal-heatmap": "^3.6.0",
+    "d3-cloud": "^1.2.1",
+    "d3": "^3.5.17"
   }
 }

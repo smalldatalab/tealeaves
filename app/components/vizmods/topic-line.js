@@ -34,20 +34,23 @@ function generateChart(target_elem) {
       throw error;
     }
 
-    console.log(data);
+    // console.log(data);
+
+    var keys = [];
 
     // reformat the data a little bit
     for (var d of data) {
       // iterate through the rows
       d.date = parseDate(d.date);
 
-      // iterate through the remaining columns
-      for (var i = 1, n = columns.length; i < n; ++i) {
-        d[columns[i]] = d[columns[i]] / 100;
+      // iterate through the remaining columns excluding date
+      for (var property in d) {
+        if (d.hasOwnProperty(property) && property !== 'date') {
+          d[property] = d[property]/100;
+          keys.push(property);
+        }
       }
     }
-
-    var keys = data.columns.slice(1);
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
     z.domain(keys);
