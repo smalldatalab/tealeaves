@@ -17,7 +17,7 @@ export default Ember.Service.extend({
         const headers = {};
         headers[headerName] = headerValue;
         var options = { method: method, data: args, headers };
-        console.log("Query to ", path, " with options: ", options);
+        // console.log("Query to ", path, " with options: ", options);
 
         return me.get('ajax').request(`${eafBasePath}/${path}`, options)
           .then(function(result) { resolve(result); })
