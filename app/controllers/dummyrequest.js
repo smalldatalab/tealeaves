@@ -79,6 +79,7 @@ export default Ember.Controller.extend({
 
       this.get('eaf_api').query(this.get('query_path'), params)
         .then((response) => {
+          this.set('query_fullpath', this.get('query_path') + " w/params " + JSON.stringify(params));
           this.set('query_result', JSON.stringify(response, null, 2));
           this.set('query_loading', false);
         })
