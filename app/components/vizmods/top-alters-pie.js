@@ -120,7 +120,8 @@ function makePie(me, target, data) {
     "size": {
       "canvasHeight": 283,
       "canvasWidth": (isWide)?(1050):525,
-      "pieOuterRadius": "90%"
+      "pieOuterRadius": "90%",
+      "pieInnerRadius": "40%"
     },
     "data": {
       "sortOrder": "value-desc",

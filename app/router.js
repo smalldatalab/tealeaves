@@ -6,7 +6,7 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route('info');
+  this.route('index', { path: '/' });
   this.route('zcompare');
   this.route('browse');
   this.route('login');

@@ -25,6 +25,9 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
   var y = d3.scale.linear().range([height, 0]);
   var color = d3.scale.category20();
 
+  // fix the colors to the topic IDs so they're consistent between vis components
+  color.domain(Object.keys(topic_set));
+
   var xAxis = d3.svg.axis().scale(x)
     .orient("bottom").tickFormat(formatDate);
 
@@ -65,7 +68,7 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
   // Use D3's nest function to group the data by borough
   var dataGroupedByBorough = d3.nest()
     .key(function(d) {
-      return topic_set[d.topics[0].topic_id];
+      return d.topics[0].topic_id;
     })
     .map(message_data, d3.map);
 
@@ -79,7 +82,7 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
     // Bin the data for each borough by day
     var histData = binByDay(value);
     histDataByBorough.push({
-      borough: key,
+      topic_id: key,
       values: histData
     });
   });
@@ -105,16 +108,16 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
     .enter().append("g")
     .attr("class", "borough")
     .style("fill", function(d, i) {
-      return color(d.borough);
+      return color(d.topic_id);
     })
     .style("stroke", function(d, i) {
-      return d3.rgb(color(d.borough)).darker();
+      return d3.rgb(color(d.topic_id)).darker();
     })
     .on("mouseover", function(d) {
       div.transition()
         .duration(200)
         .style("opacity", 0.9);
-      div	.html(d.borough)
+      div	.html(topic_set[d.topic_id])
         .style("left", (d3.event.pageX) + "px")
         .style("top", (d3.event.pageY - 28) + "px");
     })
@@ -166,8 +169,6 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
 
   // Add the legend to the second box
   Ember.$.each(topic_set, function(k, v) {
-    console.log("k: ", k, "v: ", v);
-
     // colored box + label container
     var $topic_set = Ember.$("<div />")
       .css('margin', '3px')
@@ -179,7 +180,7 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
       .css('width', '15px')
       .css('height', '15px')
       .css('margin-right', '3px')
-      .css('background-color', color(v))
+      .css('background-color', color(k))
       .appendTo($topic_set);
 
     // label
@@ -227,8 +228,6 @@ export default BaseMod.extend({
             }).filter(function(v) {
               return v.topics.length > 0;
             });
-
-            console.log("messages: ", msg_topics);
 
             generateChart($target.get(0), $legend_target.get(0), topic_set, msg_topics);
 

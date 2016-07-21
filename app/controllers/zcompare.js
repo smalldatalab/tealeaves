@@ -10,10 +10,13 @@ import all_components from 'tealeaves/library/component-list';
 export default Ember.Controller.extend({
   A_title: "Half a Month Ago",
   B_title: "Last 14 Days",
-  A_start_date: d3.time.week.floor(d3.time.week.offset(new Date(), -3)),
-  A_end_date: d3.time.day.offset(d3.time.week.floor(new Date()), -4),
-  B_start_date: d3.time.day.floor(d3.time.week.offset(new Date(), -2)),
+
+  A_start_date: d3.time.week.floor(d3.time.week.offset(new Date(), -4)),
+  A_end_date: d3.time.week.floor(d3.time.week.offset(new Date(), -2)),
+
+  B_start_date: d3.time.week.floor(d3.time.week.offset(new Date(), -2)),
   B_end_date: d3.time.day.floor(new Date()),
+
   available_components: JSON.parse(JSON.stringify(all_components)),
   selected_component: null,
   filters: {},
