@@ -49,27 +49,16 @@ p.login-blurb a {
   }
 }
 
-// alter filter styles
-.whiteblack-lists-container {
+.alter-list {
   border: solid 1px #ccc;
   padding: 5px;
-  display: flex; justify-content: space-around;
   margin: 0.5em 0;
-}
-
-.whiteblack-lists-container .alter-list {
-  flex: 1 1;
-  padding: 5px;
   line-height: 120%;
 }
 
-.whiteblack-lists-container .alter-list.blacklist {
+.alter-list.blacklist {
   border-left: solid 1px #ccc;
   padding-left: 10px;
   background: #333;
   color: white;
-}
-
-.whiteblack-lists-container .alter-list li {
-  margin: 0.5em 0;
 }

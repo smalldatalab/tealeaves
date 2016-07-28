@@ -1,30 +1,23 @@
 <li class="list-group-item">
     <div style="margin-bottom: 5px;">
-        <i class="fa fa-users" style="margin: 5px;"></i> alter whitelist/blacklist: <i class="fa fa-circle-o-notch fa-spin alters-loader"></i><br />
-
         <div>
-            <select>
-                <option>whitelist</option>
-                <option>blacklist</option>
+            <i class="fa fa-users" style="margin: 5px;"></i> alter whitelist/blacklist: <i class="fa fa-circle-o-notch fa-spin alters-loader"></i>
+
+            <select onchange={{action (mut alter_list_type) value="target.value"}}>
+              {{#each-in alter_list_type_options as |cur_option desc|}}
+                  <option value={{cur_option}} selected={{eq alter_list_type cur_option}}>{{desc}}</option>
+              {{/each-in}}
             </select>
         </div>
 
         <!-- user whitelist/blacklist listview -->
         <div class="whiteblack-lists-container">
-            <div class="alter-list whitelist">
-              <b>Whitelisted Names:</b>
+            <div class="alter-list {{ alter_list_type }}">
+              <b>{{ capitalize alter_list_type }}ed Names:</b>
               <ul>
-                {{#each selected_alter_whitelist as |key|}}
-                    <li>(<a href="#" {{ action "remove-alter" key }}>remove</a> | <a href="#" {{ action "swap-alter" key false }}>swap</a>) {{key}}</li>
+                {{#each selected_alter_list as |key|}}
+                    <li>[<a href="#" {{ action "remove-alter" key }}>x</a>] {{ key }}</li>
                 {{/each}}
-              </ul>
-            </div>
-            <div class="alter-list blacklist">
-              <b>Blacklisted Names:</b>
-              <ul>
-              {{#each selected_alter_blacklist as |key|}}
-                  <li>(<a href="#" {{ action "remove-alter" key }}>remove</a> | <a href="#" {{ action "swap-alter" key true }}>swap</a>) {{key}}</li>
-              {{/each}}
               </ul>
             </div>
         </div>
@@ -39,8 +32,7 @@
         --}}
 
       {{ select-picker value=selected_alter multiple=false content=alters optionLabelPath="content.display" optionValuePath="content.value" }}
-      <button class="btn" {{action 'add-alter-to-list' selected_alter true}}>Add to Whitelist</button>
-      <button class="btn" {{action 'add-alter-to-list' selected_alter false}}>Add to Blacklist</button>
+      <button class="btn" {{ action 'add-alter' selected_alter }}>Add to List</button>
     </div>
 
     <div>
@@ -52,7 +44,7 @@
 
     <div>
         <label style="font-weight: normal;">
-          minimum emails sent to this alter:
+          minimum emails sent to alters:
           {{input type="number" min="0" width="4" name="min_sent" value=min_sent}}
         </label>
     </div>

@@ -33,8 +33,8 @@ export default Ember.Component.extend({
   // convenience method to inject filter params for alters into a params collection
   applyAlterFilter(filters, params) {
     if (filters && filters.hasOwnProperty('alters')) {
-      params['whitelist'] = JSON.stringify(filters['alters']['whitelist']);
-      params['blacklist'] = JSON.stringify(filters['alters']['blacklist']);
+      params['alter_list'] = JSON.stringify(filters['alters']['list']);
+      params['alter_list_type'] = filters['alters']['list_type'];
       if ('min_sent' in filters['alters']) {
         params['min_sent'] = filters['alters']['min_sent'];
       }

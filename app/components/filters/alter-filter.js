@@ -11,16 +11,6 @@ function filterObject(obj, predicate) {
     .reduce((res, key) => (res[key] = obj[key], res), {});
 }
 
-var PersonList = Ember.Object.extend({
-  persons: {},
-  whitelist() {
-    return Object.keys(filterObject(this.persons, (v) => v));
-  },
-  blacklist() {
-    return Object.keys(filterObject(this.persons, (v) => !v));
-  }
-});
-
 export default Ember.Component.extend({
   // services
   eaf_api: Ember.inject.service('eaf-api'),
@@ -29,45 +19,32 @@ export default Ember.Component.extend({
   alters: [],
   isAlterTimeConstrained: true,
 
-  selected_alter_list: PersonList.create(),
-  selected_alter_whitelist: function() {
-    return this.get('selected_alter_list').whitelist();
-  }.property('selected_alter_list'),
-  selected_alter_blacklist: function() {
-    return this.get('selected_alter_list').blacklist();
-  }.property('selected_alter_list'),
+  selected_alter_list: Ember.computed(() => []),
   min_sent: 0,
 
+  // alter list options
+  alter_list_type_options: {
+    'whitelist': 'whitelist (only these people)',
+    'blacklist': 'blacklist (not any of these people)'
+  },
+  alter_list_type: 'whitelist',
+
   updateMasterParams: function() {
-    var alterlist = this.get('selected_alter_list');
     this.set('params', { alters: {
-      whitelist: alterlist.whitelist(),
-      blacklist: alterlist.blacklist(),
+      list: this.get('selected_alter_list'),
+      list_type: this.get('alter_list_type'),
       min_sent: this.get('min_sent')
     }});
-  }.observes('selected_alter_list', 'min_sent'),
+  }.observes('selected_alter_list.[]', 'alter_list_type', 'min_sent'),
 
   // lifecycle event handlers
   actions: {
-    'add-alter-to-list': function(alter, addtoWhite) {
+    'add-alter': function(alter) {
       if (!alter) { return; }
-
-      var persons = this.get('selected_alter_list').get('persons');
-      persons[alter] = addtoWhite;
-      this.notifyPropertyChange('selected_alter_list');
-      this.rerender();
+      this.get('selected_alter_list').addObject(alter);
     },
     'remove-alter': function(alter) {
-      var persons = this.get('selected_alter_list').get('persons');
-      delete persons[alter];
-      this.notifyPropertyChange('selected_alter_list');
-      this.rerender();
-    },
-    'swap-alter': function(alter, movetoWhite) {
-      var persons = this.get('selected_alter_list').get('persons');
-      persons[alter] = movetoWhite;
-      this.notifyPropertyChange('selected_alter_list');
-      this.rerender();
+      this.get('selected_alter_list').removeObject(alter);
     }
   },
 
