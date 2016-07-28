@@ -195,7 +195,7 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
 export default BaseMod.extend({
   classNames: ['topic-stacked'],
 
-  bind: function(start_date, end_date) {
+  bind: function(start_date, end_date, filters) {
     var _this = this;
 
     // display the spinner
@@ -220,8 +220,17 @@ export default BaseMod.extend({
     _this.get('eaf_api').query('topic', {})
       .then(function(data) {
         var topic_set = data.objects.reduce(function(acc, v) { acc[v.id] = v.shortname; return acc; }, {});
+
+        var params = {
+          min_date: tools.apiTZDateTime(start_date),
+          max_date: tools.apiTZDateTime(end_date),
+          topics: 1
+        };
+
+        _this.applyAlterFilter(filters, params);
+
         // once we have the topics, we can query for the messages and build the rest of the graph
-        _this.get('eaf_api').query('mail_message', { min_date: tools.apiTZDateTime(start_date), max_date: tools.apiTZDateTime(end_date), topics: 1 })
+        _this.get('eaf_api').query('mail_message', params)
           .then(function(message_data) {
             var msg_topics = message_data.objects.map(function(v) {
               return {'received_on': v.received_on, 'topics': v.topics};
