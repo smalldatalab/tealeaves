@@ -39,6 +39,10 @@
                   </div>
 
                   {{#unless m.invisible}}
+                  <div class="viz-desc">
+                  {{ partial m.desc }}
+                  </div>
+
                   <div class="row" style="margin-bottom: 10px;">
                       <div class="col-md-6">
                         {{ component m.type start_date=A_start_date end_date=A_end_date filters=filter_repr }}

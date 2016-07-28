@@ -17,12 +17,21 @@ button.shift_control[disabled="true"] {
   margin-top: 1em;
 }
 
+.filter-bar .token-blacklist-box {
+  width: 100%;
+}
+
 .module_title {
   font-weight: bold; font-size: 18px; /* margin-right: 0.1em; */
 }
 .module_title a, .module_title a:link, .module_title a:hover, .module_title a:active,  .module_title a:visited {
   color: inherit;
   cursor: pointer;
+}
+
+// style for the description box above each viz component
+.viz-desc {
+  font-size: smaller;
 }
 
 .vizbox {

@@ -5,12 +5,6 @@
 import Ember from 'ember';
 /* global moment */
 
-function filterObject(obj, predicate) {
-  return Object.keys(obj)
-    .filter(key => predicate(obj[key]))
-    .reduce((res, key) => (res[key] = obj[key], res), {});
-}
-
 export default Ember.Component.extend({
   // services
   eaf_api: Ember.inject.service('eaf-api'),
@@ -30,11 +24,11 @@ export default Ember.Component.extend({
   alter_list_type: 'whitelist',
 
   updateMasterParams: function() {
-    this.set('params', { alters: {
+    this.set('params.alters', {
       list: this.get('selected_alter_list'),
       list_type: this.get('alter_list_type'),
       min_sent: this.get('min_sent')
-    }});
+    });
   }.observes('selected_alter_list.[]', 'alter_list_type', 'min_sent'),
 
   // lifecycle event handlers

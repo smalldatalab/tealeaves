@@ -8,6 +8,6 @@ export default [
   {name: 'Word Cloud', type: 'vizmods/word-cloud', icon: 'handler glyphicon glyphicon-cloud', invisible: false},
   // {name: 'Heatmap Calendar', type: 'vizmods/heat-map', icon: 'handler glyphicon glyphicon-th', invisible: true},
   // {name: 'Topic Timeline', type: 'vizmods/topic-line', icon: 'handler glyphicon glyphicon-text-size', invisible: false},
-  {name: 'Topic Stacks', type: 'vizmods/topic-stacked', icon: 'handler glyphicon glyphicon-text-size', invisible: false}
+  {name: 'Topic Stacks', type: 'vizmods/topic-stacked', desc: 'vizdescs/topic-stacked', icon: 'handler glyphicon glyphicon-text-size', invisible: false}
   // {name: 'Rhythm Map', type: 'vizmods/rhythm-map', icon: 'handler glyphicon glyphicon-time', invisible: true}
 ];

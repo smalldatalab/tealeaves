@@ -63,6 +63,11 @@ export default BaseMod.extend({
 
     this.applyAlterFilter(filters, params);
 
+    // also apply stopword filter
+    if (filters['tokens'] && filters['tokens']['list']) {
+      stopwords.addObjects(filters['tokens']['list']);
+    }
+
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
     this.get('eaf_api').query('unigram', params)
@@ -76,7 +81,9 @@ export default BaseMod.extend({
         counts.sort(function(a,b) { return b.times - a.times; });
 
         // remove all the stopwords
-        counts = counts.filter(function(x) { return x.word.length > 3 && stopwords.indexOf(x.word.toLowerCase()) === -1; });
+        counts = counts.filter(function(x) {
+          return x.word.length > 3 && stopwords.indexOf(x.word.toLowerCase()) === -1;
+        });
 
         if (counts.length > 0) {
           makeCloud(counts, counts.length, _this.$(".d3box").get(0), $me.width(), $me.height(), function() {
@@ -195,8 +202,9 @@ function makeCloud(words, total, target, width, height, complete) {
             return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
           })
           .text(function(d) { return d.text; })
+          .on('click', function(d) { console.log(d.text); })
           .append("svg:title")
-          .text(function(d) { return d.text + " : " + d.count; });
+            .text(function(d) { return d.text + " : " + d.count; });
 
     if (complete !== null) {
       complete();

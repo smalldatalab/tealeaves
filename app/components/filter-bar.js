@@ -10,11 +10,11 @@ export default Ember.Component.extend({
   dirty: false,
   filter_repr: function() {
     return JSON.stringify(this.get('master_params'));
-  }.property('master_params'),
+  }.property('master_params.alters', 'master_params.tokens'),
 
   masterDirty: function() {
     this.set('dirty', true);
-  }.observes('master_params'),
+  }.observes('master_params.alters', 'master_params.tokens'),
 
   actions: {
     'toggleFilters': function() {
