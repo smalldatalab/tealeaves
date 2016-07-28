@@ -59,8 +59,9 @@ module.exports = function(defaults) {
   app.import('bower_components/d3pie/d3pie/d3pie.min.js');
 
   // misc plugins
-  app.import('bower_components/cal-heatmap/cal-heatmap.js');
-  app.import('bower_components/cal-heatmap/cal-heatmap.css');
+  // app.import('bower_components/cal-heatmap/cal-heatmap.js');
+  // app.import('bower_components/cal-heatmap/cal-heatmap.css');
+
   app.import('bower_components/font-awesome-animation/dist/font-awesome-animation.min.css');
 
   return app.toTree();
