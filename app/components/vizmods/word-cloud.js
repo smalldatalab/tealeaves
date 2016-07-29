@@ -86,10 +86,21 @@ export default BaseMod.extend({
         });
 
         if (counts.length > 0) {
-          makeCloud(counts, counts.length, _this.$(".d3box").get(0), $me.width(), $me.height(), function() {
-            // hide the spinner now
-            _this.$(".loader").hide();
-          });
+          makeCloud(counts, counts.length, _this.$(".d3box").get(0), $me.width(), $me.height(),
+            () => { // complete action
+              // hide the spinner now
+              _this.$(".loader").hide();
+            },
+            (word) => { // revoke action
+              var tokfilter = _this.get('filters.tokens.list');
+              if (!tokfilter) {
+                _this.set('filters.tokens.list', []);
+                tokfilter = _this.get('filters.tokens.list');
+              }
+
+              tokfilter.addObject(word);
+            }
+          );
         }
         else {
           // soooo redundant!
@@ -153,7 +164,7 @@ function normalizeWordCounts(accumulator, words) {
   }, accumulator);
 }
 
-function makeCloud(words, total, target, width, height, complete) {
+function makeCloud(words, total, target, width, height, complete, revoke_action) {
   var fill = d3.scale.category20();
 
   // find largest and smallest word, then make a scale for that
@@ -202,7 +213,7 @@ function makeCloud(words, total, target, width, height, complete) {
             return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
           })
           .text(function(d) { return d.text; })
-          .on('click', function(d) { console.log(d.text); })
+          .on('click', function(d) { if (revoke_action) { revoke_action(d.text); } })
           .append("svg:title")
             .text(function(d) { return d.text + " : " + d.count; });
 
