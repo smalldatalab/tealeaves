@@ -27,16 +27,16 @@ export default Ember.Component.extend({
 
   updateMasterParams: function() {
     this.notifyPropertyChange('params');
-  }.observes('params.selected_alter_list.[]', 'params.alter_list_type', 'params.min_sent'),
+  }.property('params.selected_alter_list.[]', 'params.alter_list_type', 'params.min_sent'),
 
   // lifecycle event handlers
   actions: {
     'add-alter': function(alter) {
       if (!alter) { return; }
-      this.get('selected_alter_list').addObject(alter);
+      this.get('params.selected_alter_list').addObject(alter);
     },
     'remove-alter': function(alter) {
-      this.get('selected_alter_list').removeObject(alter);
+      this.get('params.selected_alter_list').removeObject(alter);
     }
   },
 
@@ -46,7 +46,7 @@ export default Ember.Component.extend({
 
   bind: function() {
     this.bindAlters();
-  }.observes('isAlterTimeConstrained'),
+  }.observes('isAlterTimeConstrained', 'start_date_A', 'start_date_B', 'end_date_A', 'end_date_B'),
 
   /**
    * Queries for list of alters and populates dropdown with the results.

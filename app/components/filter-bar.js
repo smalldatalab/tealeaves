@@ -10,7 +10,12 @@ export default Ember.Component.extend({
   dirty: false,
   filter_repr: function() {
     return JSON.stringify(this.get('master_params'));
-  }.property('master_params.alters', 'master_params.tokens'),
+  }.property(
+    'master_params.alters.min_sent',
+    'master_params.alters.selected_alter_list.[]',
+    'master_params.alters.alter_list_type',
+    'master_params.tokens.token_list_str'
+  ),
 
   init: function() {
     this._super(...arguments);
@@ -22,7 +27,12 @@ export default Ember.Component.extend({
 
   masterDirty: function() {
     this.set('dirty', true);
-  }.observes('master_params.alters', 'master_params.tokens'),
+  }.observes(
+    'master_params.alters.min_sent',
+    'master_params.alters.selected_alter_list.[]',
+    'master_params.alters.alter_list_type',
+    'master_params.tokens.token_list_str'
+  ),
 
   actions: {
     'toggleFilters': function() {
