@@ -9,7 +9,10 @@
     </div>
 </div>
 
-<hr style="width: 100%; border-color: #ccc;"/>
+{{ filter-bar action="updateFilter"
+start_date_A=start_date end_date_A=end_date
+start_date_B=start_date end_date_B=end_date
+}}
 
 <!-- visualization section-->
 <div class="container-fluid">
@@ -28,7 +31,7 @@
                   {{#unless m.invisible}}
                   <div class="row" style="margin-bottom: 10px;">
                       <div class="col-md-12">
-                        {{ component m.type start_date=start_date end_date=end_date layout_direction='wide' }}
+                        {{ component m.type start_date=start_date end_date=end_date layout_direction='wide' filters=filter_repr }}
                       </div>
                   </div>
                   {{/unless}}

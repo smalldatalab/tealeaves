@@ -5,12 +5,18 @@
 import Ember from 'ember';
 import all_components from 'tealeaves/library/component-list';
 
+/* global d3 */
+
 export default Ember.Controller.extend({
-  start_date: null,
-  end_date: null,
+  start_date: d3.time.week.floor(d3.time.week.offset(new Date(), -4)),
+  end_date: d3.time.day.floor(new Date()),
   available_components: JSON.parse(JSON.stringify(all_components)),
   selected_component: null,
   no_components: Ember.computed.empty('available_components'),
+
+  filters: {},
+  filter_repr: function() { return JSON.stringify(this.get('filters')); }.property('filters'),
+
   actions: {
     setInterval: function(start, end) {
       this.set('start_date', start);
@@ -56,6 +62,11 @@ export default Ember.Controller.extend({
     },
     toggleVizModuleVisibility: function(item) {
       Ember.set(item, 'invisible', !Ember.get(item, 'invisible'));
+    },
+    updateFilter: function(filters) {
+      this.set('filters', filters);
+      console.log("Updated filter?: ", this.get('filters'));
+      this.notifyPropertyChange('filters');
     }
   }
 });
