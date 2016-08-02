@@ -44,7 +44,8 @@ export default Ember.Component.extend({
   _prebind: function() {
     var start_date = this.get('start_date');
     var end_date = this.get('end_date');
-    var filters = JSON.parse(this.get('filters'));
+    // var filters = JSON.parse(this.get('filters'));
+    var filters = this.get('filters');
 
     if (start_date == null || end_date == null) {
       // console.error("Can't refresh with a null range");
@@ -62,7 +63,15 @@ export default Ember.Component.extend({
     this.$().find(".borked").hide();
 
     this.bind(start_date, end_date, filters);
-  }.observes('start_date', 'end_date', 'filters'),
+  },
+
+  start_end_changed: function() {
+    Ember.run.debounce(this, this._prebind, 1000, true);
+  }.observes('start_date', 'end_date'),
+
+  filters_changed: function() {
+    Ember.run.debounce(this, this._prebind, 1000);
+  }.observes('filters'),
 
   /**
    * Fired when it's time to associate the component with data; override this

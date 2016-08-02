@@ -2,12 +2,13 @@
  * Created by faisal on 2/24/15.
  */
 
-// import Ember from 'ember';
+import Ember from 'ember';
 import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
-var stopwords = ["a", "about", "above", "across", "after", "again", "against", "all", "almost", "alone", "along",
+var stopwords = [
+  "a", "about", "above", "across", "after", "again", "against", "all", "almost", "alone", "along",
   "already", "also", "although", "always", "among", "an", "and", "another", "any", "anybody", "anyone", "anything",
   "anywhere", "are", "area", "areas", "around", "as", "ask", "asked", "asking", "asks", "at", "away", "b", "back", "backed",
   "backing", "backs", "be", "became", "because", "become", "becomes", "been", "before", "began", "behind", "being", "beings",
@@ -39,12 +40,13 @@ var stopwords = ["a", "about", "above", "across", "after", "again", "against", "
   "wanted", "wanting", "wants", "was", "way", "ways", "we", "well", "wells", "went", "were", "what", "when", "where",
   "whether", "which", "while", "who", "whole", "whose", "why", "will", "with", "within", "without", "work", "worked",
   "working", "works", "would", "x", "y", "year", "years", "yet", "you", "young", "younger", "youngest", "your", "yours",
-  "z"];
+  "z",
+  "edu","com","org", "co", "ca", "io", "de", "i've", "i'll", "i'm", "am", "pm", "gt", "lt" // html detritus
+];
 
 var this_jan = d3.time.year.floor(new Date());
 var months = d3.time.month.range(this_jan, d3.time.year.offset(this_jan,1)).map(function(x) { return d3.time.format("%b")(x).toLowerCase(); });
 
-stopwords.addObjects(["edu","com","org", "co", "ca", "io", "de", "i've", "i'll", "i'm", "am", "pm", "gt", "lt"]);
 stopwords.addObjects(months);
 
 export default BaseMod.extend({
@@ -92,13 +94,7 @@ export default BaseMod.extend({
               _this.$(".loader").hide();
             },
             (word) => { // revoke action
-              var tokfilter = _this.get('filters.tokens.list');
-              if (!tokfilter) {
-                _this.set('filters.tokens.list', []);
-                tokfilter = _this.get('filters.tokens.list');
-              }
-
-              tokfilter.addObject(word);
+              _this.get('filters.tokens.list').addObject(word);
             }
           );
         }
@@ -109,7 +105,11 @@ export default BaseMod.extend({
           _this.$(".d3box").children().remove();
         }
       });
-  }
+  },
+
+  updatedWordList: Ember.observer('filters.tokens.list.[]', function() {
+    Ember.run.debounce(this, this._prebind, 200);
+  })
 });
 
 /*

@@ -6,7 +6,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   classNames: ['filter-bar'],
-  master_params: {},
+  // master_params: {},
   dirty: false,
   filter_repr: function() {
     return JSON.stringify(this.get('master_params'));
@@ -14,13 +14,13 @@ export default Ember.Component.extend({
     'master_params.alters.min_sent',
     'master_params.alters.selected_alter_list.[]',
     'master_params.alters.alter_list_type',
-    'master_params.tokens.token_list_str'
+    'master_params.tokens.list.[]'
   ),
 
   init: function() {
     this._super(...arguments);
 
-    this.set('master_params', {});
+    // this.set('master_params', {});
     this.set('master_params.alters', {});
     this.set('master_params.tokens', {});
   },
@@ -31,7 +31,7 @@ export default Ember.Component.extend({
     'master_params.alters.min_sent',
     'master_params.alters.selected_alter_list.[]',
     'master_params.alters.alter_list_type',
-    'master_params.tokens.token_list_str'
+    'master_params.tokens.list.[]'
   ),
 
   actions: {

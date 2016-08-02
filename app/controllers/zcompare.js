@@ -73,8 +73,8 @@ export default Ember.Controller.extend({
     toggleVizModuleVisibility: function(item) {
       Ember.set(item, 'invisible', !Ember.get(item, 'invisible'));
     },
-    updateFilter: function(filters) {
-      this.set('filters', filters);
+    updateFilter: function() {
+      // this.set('filters', filters);
       console.log("Updated filter?: ", this.get('filters'));
       this.notifyPropertyChange('filters');
     }
