@@ -12,6 +12,14 @@ export default Ember.Component.extend({
     return JSON.stringify(this.get('master_params'));
   }.property('master_params.alters', 'master_params.tokens'),
 
+  init: function() {
+    this._super(...arguments);
+
+    this.set('master_params', {});
+    this.set('master_params.alters', {});
+    this.set('master_params.tokens', {});
+  },
+
   masterDirty: function() {
     this.set('dirty', true);
   }.observes('master_params.alters', 'master_params.tokens'),

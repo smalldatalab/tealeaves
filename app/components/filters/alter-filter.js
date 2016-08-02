@@ -9,27 +9,25 @@ export default Ember.Component.extend({
   // services
   eaf_api: Ember.inject.service('eaf-api'),
 
-  // properties and computed properties
+  init: function() {
+    this._super(...arguments);
+
+    this.set('params.min_sent', 0);
+    this.set('params.selected_alter_list', []);
+    this.set('params.alter_list_type', 'whitelist');
+  },
+
+  // our own local propeties
   alters: [],
-  isAlterTimeConstrained: true,
-
-  selected_alter_list: Ember.computed(() => []),
-  min_sent: 0,
-
-  // alter list options
   alter_list_type_options: {
     'whitelist': 'whitelist (only these people)',
     'blacklist': 'blacklist (not any of these people)'
   },
-  alter_list_type: 'whitelist',
+  isAlterTimeConstrained: true,
 
   updateMasterParams: function() {
-    this.set('params.alters', {
-      list: this.get('selected_alter_list'),
-      list_type: this.get('alter_list_type'),
-      min_sent: this.get('min_sent')
-    });
-  }.observes('selected_alter_list.[]', 'alter_list_type', 'min_sent'),
+    this.notifyPropertyChange('params');
+  }.observes('params.selected_alter_list.[]', 'params.alter_list_type', 'params.min_sent'),
 
   // lifecycle event handlers
   actions: {

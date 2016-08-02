@@ -6,15 +6,15 @@
     <ul class="list-group filter-items" style="display: none;">
         <li class="list-group-item">
             {{ filters/alter-filter
-              params=master_params
-              start_date_A=start_date_A end_date_A=end_date_A
-              start_date_B=start_date_B end_date_B=end_date_B
+                params=master_params.alters
+                start_date_A=start_date_A end_date_A=end_date_A
+                start_date_B=start_date_B end_date_B=end_date_B
             }}
 
             {{ filters/token-filter
-            params=master_params
-            start_date_A=start_date_A end_date_A=end_date_A
-            start_date_B=start_date_B end_date_B=end_date_B
+                params=master_params.tokens
+                start_date_A=start_date_A end_date_A=end_date_A
+                start_date_B=start_date_B end_date_B=end_date_B
             }}
         </li>
 

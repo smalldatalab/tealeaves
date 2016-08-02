@@ -3,9 +3,9 @@
         <div>
             <i class="fa fa-users" style="margin: 5px;"></i> alter whitelist/blacklist: <i class="fa fa-circle-o-notch fa-spin alters-loader"></i>
 
-            <select onchange={{action (mut alter_list_type) value="target.value"}}>
+            <select onchange={{action (mut params.alter_list_type) value="target.value"}}>
               {{#each-in alter_list_type_options as |cur_option desc|}}
-                  <option value={{cur_option}} selected={{eq alter_list_type cur_option}}>{{desc}}</option>
+                  <option value={{cur_option}} selected={{eq params.alter_list_type cur_option}}>{{desc}}</option>
               {{/each-in}}
             </select>
         </div>
@@ -15,7 +15,7 @@
             <div class="alter-list {{ alter_list_type }}">
               <b>{{ capitalize alter_list_type }}ed Names:</b>
               <ul>
-                {{#each selected_alter_list as |key|}}
+                {{#each params.selected_alter_list as |key|}}
                     <li>[<a href="#" {{ action "remove-alter" key }}>x</a>] {{ key }}</li>
                 {{/each}}
               </ul>
@@ -45,7 +45,7 @@
     <div>
         <label style="font-weight: normal;">
           minimum emails sent to alters:
-          {{input type="number" min="0" width="4" name="min_sent" value=min_sent}}
+          {{input type="number" min="0" width="4" name="min_sent" value=params.min_sent}}
         </label>
     </div>
 </li>
