@@ -23,9 +23,10 @@ export default BaseMod.extend({
 
     var params = {
       min_date: tools.apiTZDateTime(start_date),
-      max_date: tools.apiTZDateTime(end_date)
+      max_date: tools.apiTZDateTime(end_date),
+      exclude_labels: ['SENT']
     };
-    
+
     this.applyAlterFilter(filters, params);
 
     // attempt to hit the eaf API
@@ -55,5 +56,13 @@ export default BaseMod.extend({
       .finally(function() {
         _this.$(".loader").hide();
       });
+  },
+
+  actions: {
+    addAlterToList(alter) {
+      let alters_list = this.get('filters.alters.selected_alter_list');
+      alters_list.addObject(alter);
+      // this.sendAction('action');
+    }
   }
 });

@@ -3,7 +3,7 @@
       {{#each alters as |person|}}
           <div class="row">
               <div class="col-md-6">
-                {{person.idx}}. {{ person.name }}
+                {{person.idx}}. <a {{ action 'addAlterToList' person.name }}>{{ person.name }}</a>
               </div>
               <div class="col-md-6">
                   {{ bootstrap-progressbar value=person.count maxvalue=total_mails }}
