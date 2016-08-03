@@ -19,6 +19,7 @@ export default Ember.Component.extend({
 
   // our own local propeties
   alters: [],
+  selected_alter: null,
   alter_list_type_options: {
     'whitelist': 'whitelist (only these people)',
     'blacklist': 'blacklist (not any of these people)'
@@ -53,7 +54,6 @@ export default Ember.Component.extend({
    */
   bindAlters: function() {
     this.$(".alters-loader").show();
-    this.set('selected_alter', null);
 
     var params = {};
 
