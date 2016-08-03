@@ -5,6 +5,8 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
+  localSettings: Ember.inject.service('local-settings'),
+
   classNames: ['filter-bar'],
   // master_params: {},
   dirty: false,
@@ -20,9 +22,18 @@ export default Ember.Component.extend({
   init: function() {
     this._super(...arguments);
 
-    // this.set('master_params', {});
+    // ensure the necessary endpoints exist
     this.set('master_params.alters', {});
     this.set('master_params.tokens', {});
+
+    let ourParams = this.get('localSettings').get('settings.master_params');
+
+    console.log("Loaded params: ", ourParams);
+
+    if (ourParams) {
+      Ember.assign(this.get('master_params'), ourParams);
+      this.notifyPropertyChange('master_params');
+    }
   },
 
   masterDirty: function() {
@@ -36,10 +47,17 @@ export default Ember.Component.extend({
 
   actions: {
     'toggleFilters': function() {
-      this.$(".filter-items").slideToggle(300);
+      this.$(".filter-items").toggle(300);
     },
     'applyFilter': function() {
-      this.sendAction('action', this.get('master_params'));
+      let master_params = this.get('master_params');
+
+      // cache the settings in local storage so we can reload them when the page reloads
+      this.get('localSettings').set('settings.master_params', master_params);
+
+      console.log("Saved params: ", this.get('localSettings').get('settings.master_params'));
+
+      this.sendAction('action', master_params);
       this.set('dirty', false);
     }
   }
