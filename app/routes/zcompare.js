@@ -14,6 +14,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     return this.get('component_list');
   },
   beforeModel: function() {
+    this._super(...arguments);
+
     // just ping the server to make sure we're really connected
     console.log("right before routes:compare:authorize...");
     this.get('eaf_api').ping(this);
