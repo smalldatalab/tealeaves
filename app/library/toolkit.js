@@ -35,7 +35,7 @@ export default {
    */
   apiTZDateTime: function(cand_moment) {
     // FIXME: for now we're just leaving out the timezone because we're assuming utc
-    return cand_moment.utcOffset(0).format("YYYY-MM-DD HH:mm:ss");
+    return cand_moment.utcOffset(0).format("YYYY-MM-DD"); // cut off HH:mm:ss
   },
 
   /**
