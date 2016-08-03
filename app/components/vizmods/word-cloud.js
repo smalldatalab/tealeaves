@@ -95,6 +95,7 @@ export default BaseMod.extend({
             },
             (word) => { // revoke action
               _this.get('filters.tokens.list').addObject(word);
+              _this.sendAction('action');
             }
           );
         }
@@ -106,10 +107,6 @@ export default BaseMod.extend({
         }
       });
   },
-
-  updatedWordList: Ember.observer('filters.tokens.list.[]', function() {
-    Ember.run.debounce(this, this._prebind, 200);
-  })
 });
 
 /*

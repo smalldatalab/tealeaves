@@ -46,10 +46,10 @@
 
                   <div class="row" style="margin-bottom: 10px;">
                       <div class="col-md-6">
-                        {{ component m.type start_date=A_start_date end_date=A_end_date filters=filters }}
+                        {{ component m.type start_date=A_start_date end_date=A_end_date filters=filters update_filter=update_filter action='updateFilter' }}
                       </div>
                       <div class="col-md-6">
-                        {{ component m.type start_date=B_start_date end_date=B_end_date filters=filters }}
+                        {{ component m.type start_date=B_start_date end_date=B_end_date filters=filters update_filter=update_filter action='updateFilter' }}
                       </div>
                   </div>
                   {{/unless}}

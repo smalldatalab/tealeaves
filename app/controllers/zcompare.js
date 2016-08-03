@@ -8,8 +8,8 @@ import all_components from 'tealeaves/library/component-list';
 /* global d3 */
 
 export default Ember.Controller.extend({
-  A_title: "Half a Month Ago",
-  B_title: "Last 14 Days",
+  A_title: "Interval A",
+  B_title: "Interval B",
 
   A_start_date: d3.time.week.floor(d3.time.week.offset(new Date(), -4)),
   A_end_date: d3.time.week.floor(d3.time.week.offset(new Date(), -2)),
@@ -20,6 +20,7 @@ export default Ember.Controller.extend({
   available_components: JSON.parse(JSON.stringify(all_components)),
   selected_component: null,
   filters: {},
+  update_filter: 0,
   filter_repr: function() { return JSON.stringify(this.get('filters')); }.property('filters'),
   no_components: Ember.computed.empty('available_components'),
 
@@ -74,9 +75,9 @@ export default Ember.Controller.extend({
       Ember.set(item, 'invisible', !Ember.get(item, 'invisible'));
     },
     updateFilter: function() {
-      // this.set('filters', filters);
-      console.log("Updated filter?: ", this.get('filters'));
-      this.notifyPropertyChange('filters');
+      console.log("Received request to update filter!");
+      this.set('update_filter', (this.get('update_filter') + 1) % 20);
+      this.notifyPropertyChange('update_filter');
     }
   }
 });

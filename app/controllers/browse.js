@@ -15,6 +15,7 @@ export default Ember.Controller.extend({
   no_components: Ember.computed.empty('available_components'),
 
   filters: {},
+  update_filter: 0,
   filter_repr: function() { return JSON.stringify(this.get('filters')); }.property('filters'),
 
   actions: {
@@ -63,10 +64,10 @@ export default Ember.Controller.extend({
     toggleVizModuleVisibility: function(item) {
       Ember.set(item, 'invisible', !Ember.get(item, 'invisible'));
     },
-    updateFilter: function(filters) {
-      this.set('filters', filters);
-      console.log("Updated filter?: ", this.get('filters'));
-      this.notifyPropertyChange('filters');
+    updateFilter: function() {
+      console.log("Received request to update filter!");
+      this.set('update_filter', (this.get('update_filter') + 1) % 20);
+      this.notifyPropertyChange('update_filter');
     }
   }
 });

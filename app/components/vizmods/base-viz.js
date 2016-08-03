@@ -73,6 +73,10 @@ export default Ember.Component.extend({
     Ember.run.debounce(this, this._prebind, 1000);
   }.observes('filters'),
 
+  filter_explicit_update: function() {
+    Ember.run.debounce(this, this._prebind, 1000, true);
+  }.observes('update_filter'),
+
   /**
    * Fired when it's time to associate the component with data; override this
    * to set up your component and fill it with data.
