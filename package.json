@@ -37,7 +37,6 @@
     "ember-cli-release": "0.2.8",
     "ember-cli-sass": "5.3.1",
     "ember-cli-select-picker": "2.3.5",
-    "ember-cli-sri": "^2.1.0",
     "ember-cli-uglify": "^1.2.0",
     "ember-composable-helpers": "1.0.0",
     "ember-data": "^2.6.0",
@@ -50,5 +49,8 @@
     "liquid-fire": "0.23.1",
     "loader.js": "^4.0.1",
     "torii": "0.8.0"
+  },
+  "dependencies": {
+    "ember-local-settings": "^1.0.3"
   }
 }
