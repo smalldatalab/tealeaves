@@ -84,5 +84,14 @@ export default {
       if (filterfn(mapped)) { acc.push(mapped); }
       return acc;
     }, []);
+  },
+
+  /**
+   * For a given array of arrays, returns the elements of each inner array 'flattened' into a single outer one.
+   * @param input an array of arrays
+   * @returns {*} an array of the elements within each inner array
+     */
+  flattened: function(input) {
+    return input.reduce(function (a, b) { return a.concat(b); }, []);
   }
 };

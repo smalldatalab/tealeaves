@@ -24,7 +24,8 @@ export default BaseMod.extend({
 
     var params = {
       min_date: tools.apiTZDateTime(start_date),
-      max_date: tools.apiTZDateTime(end_date)
+      max_date: tools.apiTZDateTime(end_date),
+      exclude_labels: JSON.stringify(['CHAT'])
     };
 
     this.applyAlterFilter(filters, params);
@@ -48,8 +49,10 @@ export default BaseMod.extend({
         _this.$(".d3box").empty();
 
         // we need to collapse on the user's name after removing single-level parentheticals
-        var revised_counts = tools.countBy(data.objects.map((x) => x.from_field),
-          function(k) { return k.replace(emails, '').replace(stripquotes, '').replace(stripparens, '').trim(); });
+        var revised_counts = tools.countBy(
+          tools.flattened(data.objects.map((x) => (x.labels.indexOf("SENT" !== -1)?(x.from_field):x.to_field.split(',')))),
+          function(k) { return k.replace(emails, '').replace(stripquotes, '').replace(stripparens, '').trim(); }
+        );
 
         // convert the key:value map into a [{label: <key>, value: <value>},...] array, sigh
         revised_counts = Object.keys(revised_counts).map(function (key) {
