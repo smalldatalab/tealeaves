@@ -25,13 +25,20 @@ export default Ember.Component.extend({
     // ensure the necessary endpoints exist
     this.set('master_params.alters', {});
     this.set('master_params.tokens', {});
+  },
+
+  asdf: function() {
+    // this._super(...arguments);
 
     let ourParams = this.get('localSettings').get('settings.master_params');
 
     console.log("Loaded params: ", ourParams);
 
     if (ourParams) {
-      Ember.assign(this.get('master_params'), ourParams);
+      console.log("Our params: ", ourParams);
+      console.log("master_params: ", this.get('master_params'));
+      this.set('master_params', ourParams);
+      console.log("post-set master_params: ", this.get('master_params'));
       this.notifyPropertyChange('master_params');
     }
   },

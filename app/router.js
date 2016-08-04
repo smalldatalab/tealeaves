@@ -12,7 +12,7 @@ Router.map(function() {
   this.route('login');
   this.route('authed');
 
-  this.route('dummyrequest', { path: '/dumb' });
+  this.route('dummyrequest', { path: '/api' });
 });
 
 export default Router;

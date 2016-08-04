@@ -15,6 +15,8 @@ export default Ember.Component.extend({
   layout_direction: 'narrow',
 
   didInsertElement: function() {
+    this._super(...arguments);
+
     // append a loader so we don't have to inherit a template as well to get it
     Ember.$('<div class="loader"><i class="fa fa-cog fa-spin"></i></div>')
       .appendTo(this.$());
