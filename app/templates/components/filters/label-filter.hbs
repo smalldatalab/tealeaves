@@ -1,0 +1,13 @@
+<li class="list-group-item" style="border-top: solid 1px #ccc;">
+    <i class="fa fa-tag" style="margin: 5px;"></i> label whitelist: <i class="fa fa-circle-o-notch fa-spin loader-indicator {{ if isLoading 'currently-loading' }}"></i>
+
+    <div style="margin-bottom: 5px;">
+        <ul class="checkbox-list">
+        {{#multiselect-checkboxes options=availableLabels selection=params.list labelProperty='name' valueProperty='id' as |label isSelected|}}
+            <li><label class="checkbox-inline {{ if (eq label.type 'system') 'system-label' }}">{{input type="checkbox" checked=isSelected}} {{ label.name }}</label></li>
+        {{/multiselect-checkboxes}}
+        </ul>
+
+        <div style="margin-left: 20px; margin-top: 1em;">(<span class="system-label">default label</span>)</div>
+    </div>
+</li>
