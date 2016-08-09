@@ -1,0 +1,44 @@
+// styles for the filter bar
+.filter-bar {
+  margin-top: 1em;
+}
+
+// filter module loaders
+.loader-indicator {
+  display: none;
+}
+.loader-indicator.currently-loading {
+  display: inherit;
+}
+
+.filter-bar .token-blacklist-box {
+  width: 100%;
+}
+
+// list of label checkboxes
+ul.checkbox-list  {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul.checkbox-list li input {
+  margin-right: .25em;
+}
+
+ul.checkbox-list li {
+  border: 1px transparent solid;
+  display: inline-block;
+  width: 16em;
+}
+
+ul.checkbox-list li label {
+  margin-left: 0;
+}
+
+.system-label {
+  font-style: oblique;
+}
+.system-label::after {
+  content: '*'
+}
