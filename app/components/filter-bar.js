@@ -16,7 +16,8 @@ export default Ember.Component.extend({
     'master_params.alters.min_sent',
     'master_params.alters.selected_alter_list.[]',
     'master_params.alters.alter_list_type',
-    'master_params.tokens.list.[]'
+    'master_params.tokens.list.[]',
+    'master_params.labels.list.[]'
   ),
 
   init: function() {
@@ -25,6 +26,7 @@ export default Ember.Component.extend({
     // ensure the necessary endpoints exist
     this.set('master_params.alters', {});
     this.set('master_params.tokens', {});
+    this.set('master_params.labels', {});
   },
 
   asdf: function() {
@@ -49,7 +51,8 @@ export default Ember.Component.extend({
     'master_params.alters.min_sent',
     'master_params.alters.selected_alter_list.[]',
     'master_params.alters.alter_list_type',
-    'master_params.tokens.list.[]'
+    'master_params.tokens.list.[]',
+    'master_params.labels.list.[]'
   ),
 
   actions: {

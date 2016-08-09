@@ -64,6 +64,7 @@ export default BaseMod.extend({
     };
 
     this.applyAlterFilter(filters, params);
+    this.applyLabelFilter(filters, params);
 
     // also apply stopword filter
     if (filters['tokens'] && filters['tokens']['list']) {

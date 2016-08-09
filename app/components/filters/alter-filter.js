@@ -15,9 +15,12 @@ export default Ember.Component.extend({
     this.set('params.min_sent', 0);
     this.set('params.selected_alter_list', []);
     this.set('params.alter_list_type', 'whitelist');
+
+    this.bind();
   },
 
   // our own local propeties
+  isLoading: false,
   alters: [],
   selected_alter: null,
   alter_list_type_options: {
@@ -41,10 +44,6 @@ export default Ember.Component.extend({
     }
   },
 
-  didInsertElement: function() {
-    this.bind();
-  },
-
   bind: function() {
     this.bindAlters();
   }.observes('isAlterTimeConstrained', 'start_date_A', 'start_date_B', 'end_date_A', 'end_date_B'),
@@ -53,7 +52,7 @@ export default Ember.Component.extend({
    * Queries for list of alters and populates dropdown with the results.
    */
   bindAlters: function() {
-    this.$(".alters-loader").show();
+    this.set('isLoading', true);
 
     var params = {};
 
@@ -79,7 +78,7 @@ export default Ember.Component.extend({
       })
       .finally(function() {
         // disable the loading spinner
-        _this.$(".alters-loader").fadeOut(300);
+        _this.set('isLoading', false);
       });
   }
 });

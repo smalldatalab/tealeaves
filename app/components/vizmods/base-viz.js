@@ -43,6 +43,12 @@ export default Ember.Component.extend({
     }
   },
 
+  applyLabelFilter(filters, params) {
+    if (filters && filters.hasOwnProperty('labels')) {
+      params['labels'] = JSON.stringify(filters['labels']['list']);
+    }
+  },
+
   _prebind: function() {
     var start_date = this.get('start_date');
     var end_date = this.get('end_date');
