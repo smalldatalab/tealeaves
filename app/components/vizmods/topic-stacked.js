@@ -32,7 +32,8 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
     .orient("bottom").tickFormat(formatDate);
 
   var yAxis = d3.svg.axis().scale(y)
-    .orient("left").ticks(12);
+    .orient("left");
+
 
   var stack = d3.layout.stack()
     .values(function(d) {
@@ -110,9 +111,9 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
     .style("fill", function(d, i) {
       return color(d.topic_id);
     })
-    .style("stroke", function(d, i) {
-      return d3.rgb(color(d.topic_id)).darker();
-    })
+    // .style("stroke", function(d, i) {
+    //   return d3.rgb(color(d.topic_id)).darker();
+    // })
     .on("mouseover", function(d) {
       div.transition()
         .duration(200)
@@ -228,6 +229,7 @@ export default BaseMod.extend({
         };
 
         _this.applyAlterFilter(filters, params);
+        _this.applyLabelFilter(filters, params);
 
         // once we have the topics, we can query for the messages and build the rest of the graph
         _this.get('eaf_api').query('mail_message', params)
