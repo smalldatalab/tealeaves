@@ -7,7 +7,7 @@ import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
-var stopwords = [
+var stopwords_default = [
   "a", "about", "above", "across", "after", "again", "against", "all", "almost", "alone", "along",
   "already", "also", "although", "always", "among", "an", "and", "another", "any", "anybody", "anyone", "anything",
   "anywhere", "are", "area", "areas", "around", "as", "ask", "asked", "asking", "asks", "at", "away", "b", "back", "backed",
@@ -47,8 +47,6 @@ var stopwords = [
 var this_jan = d3.time.year.floor(new Date());
 var months = d3.time.month.range(this_jan, d3.time.year.offset(this_jan,1)).map(function(x) { return d3.time.format("%b")(x).toLowerCase(); });
 
-stopwords.addObjects(months);
-
 export default BaseMod.extend({
   classNames: ['word-cloud'],
   bind: function(start_date, end_date, filters) {
@@ -58,9 +56,12 @@ export default BaseMod.extend({
     // display the spinner
     this.$(".loader").show();
 
+    var stopwords = stopwords_default.slice(0);
+    stopwords.addObjects(months);
+
     var params = {
       min_date: tools.apiTZDateTime(start_date),
-      max_date: tools.apiTZDateTime(end_date)
+      max_date: tools.apiTZDateTime(end_date),
     };
 
     this.applyAlterFilter(filters, params);
@@ -73,6 +74,7 @@ export default BaseMod.extend({
 
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
+    /*
     this.get('eaf_api').query('unigram', params)
       .then(function(response) {
         // normalize the word counts first off
@@ -82,6 +84,38 @@ export default BaseMod.extend({
         counts = Object.keys(counts)
           .map(function(k) { return { word: k, times: counts[k] }; });
         counts.sort(function(a,b) { return b.times - a.times; });
+
+        // remove all the stopwords
+        counts = counts.filter(function(x) {
+          return x.word.length > 3 && stopwords.indexOf(x.word.toLowerCase()) === -1;
+        });
+
+        if (counts.length > 0) {
+          makeCloud(counts, counts.length, _this.$(".d3box").get(0), $me.width(), $me.height(),
+            () => { // complete action
+              // hide the spinner now
+              _this.$(".loader").hide();
+            },
+            (word) => { // revoke action
+              _this.get('filters.tokens.list').addObject(word);
+              _this.sendAction('action');
+            }
+          );
+        }
+        else {
+          // soooo redundant!
+          _this.$(".loader").hide();
+          _this.$(".borked").show();
+          _this.$(".d3box").children().remove();
+        }
+      });
+    */
+
+    // FIXME: refined attempt to use faster wordcloud-specific endpoint
+    this.get('eaf_api').query('wordcloud_words', params)
+      .then(function(response) {
+        // this response is already of the form [{word: "hello", count: 12}, ...]
+        var counts = response.words;
 
         // remove all the stopwords
         counts = counts.filter(function(x) {
