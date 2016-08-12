@@ -23,11 +23,11 @@ export default BaseMod.extend({
 
     var params = {
       min_date: tools.apiTZDateTime(start_date),
-      max_date: tools.apiTZDateTime(end_date),
-      exclude_labels: JSON.stringify(['SENT','CHAT'])
+      max_date: tools.apiTZDateTime(end_date)
     };
 
     this.applyAlterFilter(filters, params);
+    this.applyLabelFilter(filters, params);
 
     // attempt to hit the eaf API
     // this returns a promise, which we'll use when it resolves
@@ -35,7 +35,7 @@ export default BaseMod.extend({
       .then(function(data) {
         // we need to collapse on the user's name after removing single-level parentheticals
         var revised_counts = tools.countBy(
-          tools.flattened(data.objects.map((x) => (x.labels.indexOf("SENT" !== -1)?(x.from_field):x.to_field.split(',')))),
+          tools.flattened(data.objects.map((x) => ((x.labels.indexOf("SENT") === -1)?(x.from_field):x.to_field.split(',')))),
           function(k) { return k.replace(emails, '').replace(stripquotes, '').replace(stripparens, '').trim(); }
         );
 
