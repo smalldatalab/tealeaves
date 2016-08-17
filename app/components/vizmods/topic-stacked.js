@@ -7,7 +7,7 @@ import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
-function generateChart(target_elem, legend_elem, topic_set, message_data) {
+function generateChart(target_elem, legend_elem, topic_set, message_data, bucket_width) {
   var margin = {
       top: 40,
       right: 30,
@@ -56,15 +56,29 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
   });
 
   // Create one bin per day, use an offset to include the first and last days(?)
-  var dayBins = d3.time.days(d3.time.day.offset(timeExtent[0], -1),
+  // FIXME: use the bucket_width parameter to determine
+
+  var intervalBins = d3.time.days(d3.time.day.offset(timeExtent[0], -1),
     d3.time.day.offset(timeExtent[1], 0));
 
+  if (bucket_width === 'weeks') {
+    intervalBins = d3.time.week(d3.time.week.offset(timeExtent[0], -1),
+      d3.time.week.offset(timeExtent[1], 0));
+  }
+  else if (bucket_width === 'months') {
+    intervalBins = d3.time.months(d3.time.month.offset(timeExtent[0], -1),
+      d3.time.month.offset(timeExtent[1], 0));
+  }
+  else {
+    console.info("No/invalid bucket width specified, using default day interval");
+  }
+
   // Use the histogram layout to create a function that will bin the data
-  var binByDay = d3.layout.histogram()
+  var binByInterval = d3.layout.histogram()
     .value(function(d) {
       return d.received_on;
     })
-    .bins(dayBins);
+    .bins(intervalBins);
 
   // Use D3's nest function to group the data by borough
   var dataGroupedByBorough = d3.nest()
@@ -81,7 +95,7 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
     var value = o.value;
 
     // Bin the data for each borough by day
-    var histData = binByDay(value);
+    var histData = binByInterval(value);
     histDataByBorough.push({
       topic_id: key,
       values: histData
@@ -91,7 +105,7 @@ function generateChart(target_elem, legend_elem, topic_set, message_data) {
   var stackedHistData = stack(histDataByBorough);
 
   // Scale the range of the data by setting the domain
-  x.domain(d3.extent(dayBins));
+  x.domain(d3.extent(intervalBins));
   y.domain([0, d3.max(stackedHistData[stackedHistData.length - 1].values, function(d) {
     return d.y + d.y0;
   })]);
@@ -225,7 +239,7 @@ export default BaseMod.extend({
         var params = {
           min_date: tools.apiTZDateTime(start_date),
           max_date: tools.apiTZDateTime(end_date),
-          topics: 1
+          topics: 1 // 1 == true in this context
         };
 
         _this.applyAlterFilter(filters, params);
@@ -240,7 +254,7 @@ export default BaseMod.extend({
               return v.topics.length > 0;
             });
 
-            generateChart($target.get(0), $legend_target.get(0), topic_set, msg_topics);
+            generateChart($target.get(0), $legend_target.get(0), topic_set, msg_topics, 'weeks');
 
             // now we can generate the chart
             _this.$(".loader").hide();
