@@ -3,6 +3,42 @@
   margin-top: 1em;
 }
 
+// filter frameset styles
+.filter-acceptor {
+  box-shadow: inset 0px 5px 2px rgba(0,0,0,0.025); background-color: #fafafa;
+}
+.apply-btn-dirty {
+  animation-duration: 600ms;
+  animation-name: flashblue;
+  animation-iteration-count: 1;
+
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+
+@keyframes flashblue {
+  from { background: #ccf6ff; }
+  to {
+    background-color: #5bc0de;
+    border-color: #46b8da;
+  }
+}
+
+.alter-list {
+  border: solid 1px #ccc;
+  padding: 5px;
+  margin: 0.5em 0;
+  line-height: 120%;
+  padding-left: 10px;
+}
+
+.alter-list.blacklist {
+  border-left: solid 1px #ccc;
+  background: #333;
+  color: white;
+}
+
+
 // filter module loaders
 .loader-indicator {
   display: none;
