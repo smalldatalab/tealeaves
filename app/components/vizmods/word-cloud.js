@@ -239,12 +239,12 @@ function makeCloud(words, total, target, width, height, complete, revoke_action)
     .rotate(function() { return ~~(Math.random() * 2) * 90; })
     .font("Impact")
     .fontSize(function(d) { return d.size; })
-    .on("word", draw_word)
+    // .on("word", draw_word)
     .on("end", draw)
     .start();
 
   function draw_word(word) {
-    console.log(word);
+    // console.log(word);
 
     /*
     word_group
