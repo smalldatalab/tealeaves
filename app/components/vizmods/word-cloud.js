@@ -7,7 +7,7 @@ import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
-var stopwords_default = [
+var stopwords_default = new Set([
   "a", "about", "above", "across", "after", "again", "against", "all", "almost", "alone", "along",
   "already", "also", "although", "always", "among", "an", "and", "another", "any", "anybody", "anyone", "anything",
   "anywhere", "are", "area", "areas", "around", "as", "ask", "asked", "asking", "asks", "at", "away", "b", "back", "backed",
@@ -42,10 +42,12 @@ var stopwords_default = [
   "working", "works", "would", "x", "y", "year", "years", "yet", "you", "young", "younger", "youngest", "your", "yours",
   "z",
   "edu","com","org", "co", "ca", "io", "de", "i've", "i'll", "i'm", "am", "pm", "gt", "lt" // html detritus
-];
+]);
 
 var this_jan = d3.time.year.floor(new Date());
 var months = d3.time.month.range(this_jan, d3.time.year.offset(this_jan,1)).map(function(x) { return d3.time.format("%b")(x).toLowerCase(); });
+
+stopwords_default = new Set([...stopwords_default, ...months]);
 
 export default BaseMod.extend({
   classNames: ['word-cloud'],
@@ -56,20 +58,24 @@ export default BaseMod.extend({
     // display the spinner
     this.$(".loader").show();
 
-    var stopwords = stopwords_default.slice(0);
-    stopwords.addObjects(months);
-
     var params = {
       min_date: tools.apiTZDateTime(start_date),
       max_date: tools.apiTZDateTime(end_date),
+      min_count: 3,
+      min_length: 4
     };
 
     this.applyAlterFilter(filters, params);
     this.applyLabelFilter(filters, params);
 
     // also apply stopword filter
+    var stopwords = null;
     if (filters['tokens'] && filters['tokens']['list']) {
-      stopwords.addObjects(filters['tokens']['list']);
+      // create a new list consisting of the merged words from the ignore list and the default set
+      stopwords = new Set([...stopwords_default, ...filters['tokens']['list']]);
+    } else {
+      // just use the existing list
+      stopwords = stopwords_default;
     }
 
     // attempt to hit the eaf API
@@ -117,10 +123,14 @@ export default BaseMod.extend({
         // this response is already of the form [{word: "hello", count: 12}, ...]
         var counts = response.words;
 
+        var initial = counts.length;
+
         // remove all the stopwords
         counts = counts.filter(function(x) {
-          return x.word.length > 3 && stopwords.indexOf(x.word.toLowerCase()) === -1;
+          return !stopwords.has(x.word);
         });
+
+        console.log("Inital: " + initial + ", word count post-stopword-removal: " + counts.length);
 
         if (counts.length > 0) {
           makeCloud(counts, counts.length, _this.$(".d3box").get(0), $me.width(), $me.height(),
@@ -178,7 +188,6 @@ function accumulateTokens(page, args, limit, accumulator, complete) {
 
   return promise;
 }
-*/
 
 function normalizeWordCounts(accumulator, words) {
   return words.reduce(function(d, cur) {
@@ -195,6 +204,7 @@ function normalizeWordCounts(accumulator, words) {
     return d;
   }, accumulator);
 }
+ */
 
 function makeCloud(words, total, target, width, height, complete, revoke_action) {
   var fill = d3.scale.category20();
@@ -212,27 +222,57 @@ function makeCloud(words, total, target, width, height, complete, revoke_action)
     scale = d3.scale.linear().domain([minval, maxval]).range([5, 50]);
   }
 
+  var target_sel = d3.select(target);
+  // empty target prior to drawing
+  target_sel.selectAll("*").remove();
+  // also create the word_group that we'll be adding things to
+  var word_group = target_sel.append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+      .attr("transform", "translate(" + Math.round(width/2) + "," + Math.round(height/2) + ")");
+
   d3.layout.cloud().size([width, height])
     .words(words.map(function(d) { return { text: d.word, count: d.times, size: scale(d.times) * 3 }; }))
-    .timeInterval(5)
+    .timeInterval(10)
     .padding(2)
     .rotate(function() { return ~~(Math.random() * 2) * 90; })
     .font("Impact")
     .fontSize(function(d) { return d.size; })
+    .on("word", draw_word)
     .on("end", draw)
     .start();
 
+  function draw_word(word) {
+    console.log(word);
+
+    /*
+    word_group
+      .selectAll("text")
+      .data([word])
+      .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("cursor", "pointer")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; })
+        .on('click', function(d) { if (revoke_action) { revoke_action(d.text); } })
+        .append("svg:title")
+          .text(function(d) { return d.text + " : " + d.count; });
+    */
+  }
+
   function draw(words) {
-    var target_sel = d3.select(target);
+    console.log("DONE!");
 
     // empty target prior to drawing
-    target_sel.selectAll("*").remove();
+    // target_sel.selectAll("*").remove();
 
-    target_sel.append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-        .attr("transform", "translate(" + Math.round(width/2) + "," + Math.round(height/2) + ")")
+    word_group
         .selectAll("text")
         .data(words)
         .enter().append("text")
