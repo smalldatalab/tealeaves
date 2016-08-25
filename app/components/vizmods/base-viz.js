@@ -73,17 +73,17 @@ export default Ember.Component.extend({
     this.bind(start_date, end_date, filters);
   },
 
-  start_end_changed: function() {
+  start_end_changed: Ember.observer('start_date', 'end_date', function() {
     Ember.run.debounce(this, this._prebind, 1000, true);
-  }.observes('start_date', 'end_date'),
+  }),
 
-  filters_changed: function() {
+  filters_changed: Ember.observer('filters', function() {
     Ember.run.debounce(this, this._prebind, 1000);
-  }.observes('filters'),
+  }),
 
-  filter_explicit_update: function() {
+  filter_explicit_update: Ember.observer('update_filter', function() {
     Ember.run.debounce(this, this._prebind, 1000, true);
-  }.observes('update_filter'),
+  }),
 
   /**
    * Fired when it's time to associate the component with data; override this

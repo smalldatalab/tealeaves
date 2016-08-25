@@ -21,7 +21,7 @@ export default Ember.Controller.extend({
   selected_component: null,
   filters: {},
   update_filter: 0,
-  filter_repr: function() { return JSON.stringify(this.get('filters')); }.property('filters'),
+  filter_repr: Ember.computed('filters', function() { return JSON.stringify(this.get('filters')); }),
   no_components: Ember.computed.empty('available_components'),
 
   actions: {

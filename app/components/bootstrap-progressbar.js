@@ -10,7 +10,7 @@ export default Ember.Component.extend({
   didInsertElement: function() {
     this.updateWidth();
   },
-  updateWidth: function() {
+  updateWidth: Ember.observer('value', 'maxvalue', function() {
     this.$(".progress-bar").css('width', (this.get('value')/this.get('maxvalue'))*100 + "%");
-  }.observes('value', 'maxvalue')
+  })
 });

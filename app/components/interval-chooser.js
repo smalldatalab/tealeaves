@@ -55,7 +55,7 @@ export default Ember.Component.extend({
     }
   },
 
-  span_duration: function() {
+  span_duration: Ember.computed('start_date', 'end_date', function() {
     var s = this.get('start_date'), e = this.get('end_date');
 
     // if a start and end date have been chosen, return the duration in english (e.g. "3 weeks")
@@ -66,9 +66,9 @@ export default Ember.Component.extend({
     }
 
     return "(no interval selected)";
-  }.property('start_date', 'end_date'),
+  }),
 
-  right_exceeds_today: function() {
+  right_exceeds_today: Ember.computed('start_date', 'end_date', function() {
     if (!this.get('start_date') || !this.get('end_date')) {
       return false;
     }
@@ -76,16 +76,16 @@ export default Ember.Component.extend({
     var s = d3.time.day.floor(this.get('start_date')), e = d3.time.day.floor(this.get('end_date'));
 
     return new Date(e.getTime() + (e-s)) >= new Date();
-  }.property('start_date', 'end_date'),
+  }),
 
-  date_chosen: function() {
+  date_chosen: Ember.observer('start_date', 'end_date', function() {
     var start_date = this.get('start_date');
     var end_date = this.get('end_date');
 
     if (start_date != null && end_date != null) {
       this.sendAction('action', start_date, end_date);
     }
-  }.observes('start_date', 'end_date'),
+  }),
 
   actions: {
     shift: function(dir) {

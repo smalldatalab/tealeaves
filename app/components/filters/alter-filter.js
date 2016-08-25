@@ -29,9 +29,9 @@ export default Ember.Component.extend({
   },
   isAlterTimeConstrained: true,
 
-  updateMasterParams: function() {
+  updateMasterParams: Ember.computed('params.selected_alter_list.[]', 'params.alter_list_type', 'params.min_sent', function() {
     this.notifyPropertyChange('params');
-  }.property('params.selected_alter_list.[]', 'params.alter_list_type', 'params.min_sent'),
+  }),
 
   // lifecycle event handlers
   actions: {
@@ -44,9 +44,10 @@ export default Ember.Component.extend({
     }
   },
 
-  bind: function() {
+  bind: Ember.observer('isAlterTimeConstrained', 'start_date_A', 'start_date_B', 'end_date_A', 'end_date_B',
+  function() {
     Ember.run.debounce(this, this.bindAlters, 50);
-  }.observes('isAlterTimeConstrained', 'start_date_A', 'start_date_B', 'end_date_A', 'end_date_B'),
+  }),
 
   /**
    * Queries for list of alters and populates dropdown with the results.

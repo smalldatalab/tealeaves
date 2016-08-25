@@ -22,7 +22,7 @@ export default Ember.Component.extend({
     }
   }),
 
-  updateMasterParams: function() {
+  updateMasterParams: Ember.computed('params.list', function() {
     this.notifyPropertyChange('params');
-  }.property('params.list')
+  })
 });

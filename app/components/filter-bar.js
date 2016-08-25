@@ -10,15 +10,15 @@ export default Ember.Component.extend({
   classNames: ['filter-bar'],
   // master_params: {},
   dirty: false,
-  filter_repr: function() {
-    return JSON.stringify(this.get('master_params'));
-  }.property(
+  filter_repr: Ember.computed(
     'master_params.alters.min_sent',
     'master_params.alters.selected_alter_list.[]',
     'master_params.alters.alter_list_type',
     'master_params.tokens.list.[]',
-    'master_params.labels.list.[]'
-  ),
+    'master_params.labels.list.[]',
+    function() {
+      return JSON.stringify(this.get('master_params'));
+    }),
 
   init: function() {
     this._super(...arguments);
@@ -45,14 +45,15 @@ export default Ember.Component.extend({
     }
   },
 
-  masterDirty: function() {
-    this.set('dirty', true);
-  }.observes(
+  masterDirty: Ember.observer(
     'master_params.alters.min_sent',
     'master_params.alters.selected_alter_list.[]',
     'master_params.alters.alter_list_type',
     'master_params.tokens.list.[]',
-    'master_params.labels.list.[]'
+    'master_params.labels.list.[]',
+    function() {
+      this.set('dirty', true);
+    }
   ),
 
   actions: {

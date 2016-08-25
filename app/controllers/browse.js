@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
 
   filters: {},
   update_filter: 0,
-  filter_repr: function() { return JSON.stringify(this.get('filters')); }.property('filters'),
+  filter_repr: Ember.computed('filters', function() { return JSON.stringify(this.get('filters')); }),
 
   actions: {
     setInterval: function(start, end) {

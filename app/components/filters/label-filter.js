@@ -19,9 +19,9 @@ export default Ember.Component.extend({
   isLoading: false,
   availableLabels: [],
 
-  updateMasterParams: function() {
+  updateMasterParams: Ember.computed('params.list.[]', function() {
     this.notifyPropertyChange('params');
-  }.property('params.list.[]'),
+  }),
 
   bind: function() {
     this.bindLabels();
