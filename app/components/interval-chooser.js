@@ -20,7 +20,15 @@ export default Ember.Component.extend({
       autoclose: true,
       todayHighlight: true,
       endDate: new Date()
-    }).on('changeDate', function(e) {
+    });
+
+    // sync up the start and end dates (if present; they might be null, which is fine)
+    this.set_dates(this.get('start_date'), this.get('end_date'));
+  },
+
+  didRender: function() {
+    var _this = this;
+    this.$(".input-daterange").unbind("changeDate").on('changeDate', function(e) {
       // push start and end dates into component properties when set
       if (e.target.name === 'start') {
         _this.set('start_date', d3.time.day.floor(e.date));
@@ -29,9 +37,6 @@ export default Ember.Component.extend({
         _this.set('end_date', d3.time.day.offset(e.date, 1));
       }
     });
-
-    // sync up the start and end dates (if present; they might be null, which is fine)
-    this.set_dates(this.get('start_date'), this.get('end_date'));
   },
 
   set_dates: function(st, en) {
