@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   init: function() {
     this._super(...arguments);
-    this.set('params.list', []);
+    this.set('params.list', Ember.A([]));
   },
 
   token_list_str: Ember.computed('params.list.[]', {

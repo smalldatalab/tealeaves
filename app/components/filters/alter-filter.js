@@ -13,7 +13,7 @@ export default Ember.Component.extend({
     this._super(...arguments);
 
     this.set('params.min_sent', 0);
-    this.set('params.selected_alter_list', []);
+    this.set('params.selected_alter_list', Ember.A([]));
     this.set('params.alter_list_type', 'whitelist');
 
     this.bind();
@@ -21,7 +21,7 @@ export default Ember.Component.extend({
 
   // our own local propeties
   isLoading: false,
-  alters: [],
+  alters: Ember.A([]),
   selected_alter: null,
   alter_list_type_options: {
     'whitelist': 'whitelist (only these people)',

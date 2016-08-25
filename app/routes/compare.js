@@ -20,5 +20,5 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     console.log("right before routes:compare:authorize...");
     this.get('eaf_api').ping(this);
   },
-  component_list: []
+  component_list: Ember.A([])
 });

@@ -10,14 +10,14 @@ export default Ember.Component.extend({
 
   init: function() {
     this._super(...arguments);
-    this.set('params.list', []);
+    this.set('params.list', Ember.A([]));
 
     this.bind();
   },
 
   // local properties
   isLoading: false,
-  availableLabels: [],
+  availableLabels: Ember.A([]),
 
   updateMasterParams: Ember.computed('params.list.[]', function() {
     this.notifyPropertyChange('params');

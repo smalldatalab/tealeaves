@@ -17,7 +17,7 @@ export default Ember.Controller.extend({
   B_start_date: d3.time.week.floor(d3.time.week.offset(new Date(), -2)),
   B_end_date: d3.time.day.floor(new Date()),
 
-  available_components: JSON.parse(JSON.stringify(all_components)),
+  available_components: Ember.A(JSON.parse(JSON.stringify(all_components))),
   selected_component: null,
   filters: {},
   update_filter: 0,
