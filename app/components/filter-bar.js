@@ -29,7 +29,7 @@ export default Ember.Component.extend({
     this.set('master_params.labels', {});
   },
 
-  asdf: function() {
+  debug: function() {
     // this._super(...arguments);
 
     let ourParams = this.get('localSettings').get('settings.master_params');
