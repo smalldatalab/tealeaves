@@ -1,15 +1,13 @@
 <li class="list-group-item">
     <div style="margin-bottom: 5px;">
-        <div>
-            <i class="fa fa-users" style="margin: 5px;"></i> alter whitelist/blacklist:
+        <div style="position: relative;">
+            <i class="fa fa-users" style="margin: 5px;"></i> <i class="fa fa-circle-o-notch fa-spin loader-indicator {{ if isLoading 'currently-loading' }}"></i> alter whitelist/blacklist:
 
             <select onchange={{action (mut params.alter_list_type) value="target.value"}}>
               {{#each-in alter_list_type_options as |cur_option desc|}}
                   <option value={{cur_option}} selected={{eq params.alter_list_type cur_option}}>{{desc}}</option>
               {{/each-in}}
             </select>
-
-            <i class="fa fa-circle-o-notch fa-spin loader-indicator {{ if isLoading 'currently-loading' }}"></i>
         </div>
 
         <!-- user whitelist/blacklist listview -->
@@ -24,17 +22,22 @@
             </div>
         </div>
 
-        {{!--
-        <select class="selectpicker" onchange={{action (mut selected_alter) value="target.value"}}>
-          <option value="">-- select an alter --</option>
-          {{#each alters as |current_alter|}}
-              <option value="{{current_alter.value}}" selected={{eq current_alter selected_alter}}>{{current_alter.display}} ({{current_alter.value}})</option>
-          {{/each}}
-        </select>
-        --}}
+        <div class="row">
+            <div class="col-md-10">
+              <select class="selectpicker form-control" onchange={{action (mut selected_alter) value="target.value"}}>
+                <option value="">-- select an alter --</option>
+                {{#each alters as |current_alter|}}
+                    <option value="{{current_alter.value}}" selected={{eq current_alter selected_alter}}>{{current_alter.display}} ({{current_alter.value}})</option>
+                {{/each}}
+              </select>
 
-      {{ select-picker value=selected_alter multiple=false content=alters optionLabelPath="content.display" optionValuePath="content.value" }}
-      <button class="btn" {{ action 'add-alter' selected_alter }}>Add to List</button>
+            {{!--{{ select-picker value=selected_alter multiple=false content=alters optionLabelPath="content.display" optionValuePath="content.value" liveSearch=true }}--}}
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn" {{ action 'add-alter' selected_alter }} style="width: 100%;">Add to List</button>
+            </div>
+        </div>
     </div>
 
     <div>
