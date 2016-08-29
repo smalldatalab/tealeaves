@@ -51,6 +51,7 @@ stopwords_default = new Set([...stopwords_default, ...months]);
 
 export default BaseMod.extend({
   classNames: ['word-cloud'],
+  layout_engine: null,
   bind: function(start_date, end_date, filters) {
     var _this = this;
     var $me = _this.$();
@@ -61,7 +62,6 @@ export default BaseMod.extend({
     var params = {
       min_date: tools.apiTZDateTime(start_date),
       max_date: tools.apiTZDateTime(end_date),
-      min_count: 3,
       min_length: 4
     };
 
@@ -78,46 +78,6 @@ export default BaseMod.extend({
       stopwords = stopwords_default;
     }
 
-    // attempt to hit the eaf API
-    // this returns a promise, which we'll use when it resolves
-    /*
-    this.get('eaf_api').query('unigram', params)
-      .then(function(response) {
-        // normalize the word counts first off
-        var counts = normalizeWordCounts({}, response.objects);
-
-        // convert word=>counts into array of objects with keys 'word' and 'times', sorted desc on 'times'
-        counts = Object.keys(counts)
-          .map(function(k) { return { word: k, times: counts[k] }; });
-        counts.sort(function(a,b) { return b.times - a.times; });
-
-        // remove all the stopwords
-        counts = counts.filter(function(x) {
-          return x.word.length > 3 && stopwords.indexOf(x.word.toLowerCase()) === -1;
-        });
-
-        if (counts.length > 0) {
-          makeCloud(counts, counts.length, _this.$(".d3box").get(0), $me.width(), $me.height(),
-            () => { // complete action
-              // hide the spinner now
-              _this.$(".loader").hide();
-            },
-            (word) => { // revoke action
-              _this.get('filters.tokens.list').addObject(word);
-              _this.sendAction('action');
-            }
-          );
-        }
-        else {
-          // soooo redundant!
-          _this.$(".loader").hide();
-          _this.$(".borked").show();
-          _this.$(".d3box").children().remove();
-        }
-      });
-    */
-
-    // FIXME: refined attempt to use faster wordcloud-specific endpoint
     this.get('eaf_api').query('wordcloud_words', params)
       .then(function(response) {
         // this response is already of the form [{word: "hello", count: 12}, ...]
@@ -133,7 +93,15 @@ export default BaseMod.extend({
         console.log("Inital: " + initial + ", word count post-stopword-removal: " + counts.length);
 
         if (counts.length > 0) {
-          makeCloud(counts, counts.length, _this.$(".d3box").get(0), $me.width(), $me.height(),
+          // first ensure that we're not running a previous layout job
+          if (_this.layout_engine !== null) {
+            console.log("Interrupted existing layout engine!");
+
+            _this.layout_engine.stop();
+            _this.layout_engine = null;
+          }
+
+          makeCloud(_this, counts, counts.length, _this.$(".d3box").get(0), $me.width(), $me.height(),
             () => { // complete action
               // hide the spinner now
               _this.$(".loader").hide();
@@ -160,53 +128,7 @@ export default BaseMod.extend({
 ========================================================================
 */
 
-/**
- * Recursively requests all the pages for a token interval and returns a single word=>count map
- * @param page the initial page to acquire (usually the first page)
- * @param args the arguments to the initial request
- * @param limit to the number of pages to accumulate
- * @param accumulator word-count map that is recursively populated and returned at the end
- * @param complete the function to execute when all tokens have been accumulated. receives the accumulator as an argument
- */
-/*
-function accumulateTokens(page, args, limit, accumulator, complete) {
-  // chain iterative promises as long as we have extra pages to include and limit credits to spend
-  console.log("Processing: ", page, args);
-
-  var promise = ajax(page, args).then(function(response) {
-    // collapse multiple records with the same word at different times into one word=>count by summing their counts
-    accumulator = normalizeWordCounts(accumulator, response);
-
-    // nest the call to the next page
-    if (response.next != null && limit > 0) {
-      return promise.then(accumulateTokens(response.next, {}, limit-1, accumulator, complete));
-    }
-    else {
-      complete(accumulator);
-    }
-  });
-
-  return promise;
-}
-
-function normalizeWordCounts(accumulator, words) {
-  return words.reduce(function(d, cur) {
-    // use the "default dict" trick to initialize missing elements in the count
-    // (cur.word in d && d[cur.word] !== null) || (d[cur.word] = 0);
-    // ....actually, don't use that trick because it makes jslinters barf
-    if (!(cur.word in d && d[cur.word] !== null)) {
-      d[cur.word] = 0;
-    }
-
-    // add the number of times this word has occurred for each observation of it
-    d[cur.word] += cur.count;
-    // send back our augmented dictionary for the next round
-    return d;
-  }, accumulator);
-}
- */
-
-function makeCloud(words, total, target, width, height, complete, revoke_action) {
+function makeCloud(parent, words, total, target, width, height, complete, revoke_action) {
   var fill = d3.scale.category20();
 
   // find largest and smallest word, then make a scale for that
@@ -232,9 +154,40 @@ function makeCloud(words, total, target, width, height, complete, revoke_action)
     .append("g")
       .attr("transform", "translate(" + Math.round(width/2) + "," + Math.round(height/2) + ")");
 
-  d3.layout.cloud().size([width, height])
+  function draw(words) {
+    console.log("DONE!");
+
+    // mark the layout as having been completed so we don't attempt to stop it
+    parent.layout_engine = null;
+
+    // empty target prior to drawing
+    // target_sel.selectAll("*").remove();
+
+    word_group
+      .selectAll("text")
+      .data(words)
+      .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("cursor", "pointer")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; })
+        .on('click', function(d) { if (revoke_action) { revoke_action(d.text); } })
+        .append("svg:title")
+        .text(function(d) { return d.text + " : " + d.count; });
+
+    if (complete !== null) {
+      complete();
+    }
+  }
+
+  parent.layout_engine = d3.layout.cloud().size([width, height])
     .words(words.map(function(d) { return { text: d.word, count: d.times, size: scale(d.times) * 3 }; }))
-    .timeInterval(10)
+    .timeInterval(5)
     .padding(2)
     .rotate(function() { return ~~(Math.random() * 2) * 90; })
     .font("Impact")
@@ -243,10 +196,10 @@ function makeCloud(words, total, target, width, height, complete, revoke_action)
     .on("end", draw)
     .start();
 
+  /*
   function draw_word(word) {
     // console.log(word);
 
-    /*
     word_group
       .selectAll("text")
       .data([word])
@@ -263,35 +216,7 @@ function makeCloud(words, total, target, width, height, complete, revoke_action)
         .on('click', function(d) { if (revoke_action) { revoke_action(d.text); } })
         .append("svg:title")
           .text(function(d) { return d.text + " : " + d.count; });
-    */
   }
-
-  function draw(words) {
-    console.log("DONE!");
-
-    // empty target prior to drawing
-    // target_sel.selectAll("*").remove();
-
-    word_group
-        .selectAll("text")
-        .data(words)
-        .enter().append("text")
-          .style("font-size", function(d) { return d.size + "px"; })
-          .style("font-family", "Impact")
-          .style("cursor", "pointer")
-          .style("fill", function(d, i) { return fill(i); })
-          .attr("text-anchor", "middle")
-          .attr("transform", function(d) {
-            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-          })
-          .text(function(d) { return d.text; })
-          .on('click', function(d) { if (revoke_action) { revoke_action(d.text); } })
-          .append("svg:title")
-            .text(function(d) { return d.text + " : " + d.count; });
-
-    if (complete !== null) {
-      complete();
-    }
-  }
+  */
 }
 

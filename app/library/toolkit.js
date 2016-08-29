@@ -94,4 +94,52 @@ export default {
   flattened: function(input) {
     return input.reduce(function (a, b) { return a.concat(b); }, []);
   }
+
+  /*
+  normalizeWordCounts(accumulator, words) {
+    return words.reduce(function(d, cur) {
+      // use the "default dict" trick to initialize missing elements in the count
+      // (cur.word in d && d[cur.word] !== null) || (d[cur.word] = 0);
+      // ....actually, don't use that trick because it makes jslinters barf
+      if (!(cur.word in d && d[cur.word] !== null)) {
+        d[cur.word] = 0;
+      }
+
+      // add the number of times this word has occurred for each observation of it
+      d[cur.word] += cur.count;
+      // send back our augmented dictionary for the next round
+      return d;
+    }, accumulator);
+  },
+  */
+
+  /**
+   * Recursively requests all the pages for a token interval and returns a single word=>count map
+   * @param page the initial page to acquire (usually the first page)
+   * @param args the arguments to the initial request
+   * @param limit to the number of pages to accumulate
+   * @param accumulator word-count map that is recursively populated and returned at the end
+   * @param complete the function to execute when all tokens have been accumulated. receives the accumulator as an argument
+   */
+    /*
+   accumulateTokens(page, args, limit, accumulator, complete) {
+     // chain iterative promises as long as we have extra pages to include and limit credits to spend
+     console.log("Processing: ", page, args);
+
+     var promise = ajax(page, args).then(function(response) {
+     // collapse multiple records with the same word at different times into one word=>count by summing their counts
+     accumulator = this.normalizeWordCounts(accumulator, response);
+
+     // nest the call to the next page
+     if (response.next != null && limit > 0) {
+        return promise.then(this.accumulateTokens(response.next, {}, limit-1, accumulator, complete));
+       }
+       else {
+        complete(accumulator);
+       }
+     });
+
+     return promise;
+   }
+   */
 };
