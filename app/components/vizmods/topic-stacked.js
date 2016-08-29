@@ -7,6 +7,62 @@ import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
 /* global d3 */
 
+export default BaseMod.extend({
+  classNames: ['topic-stacked'],
+
+  bind: function(start_date, end_date, filters) {
+    var _this = this;
+
+    // display the spinner
+    this.$(".loader").show();
+
+    var $boxShell = this.$(".topicstacked-box");
+    var $target = this.$(".topicstacked-box svg");
+    var $legend_target = this.$(".topic-legend");
+
+    // remove any elements in the SVG
+    $target.empty();
+    $legend_target.empty();
+
+    $target.attr('viewBox', `0 0 ${$boxShell.width()} ${$boxShell.height()}`);
+    $target.attr('width', $boxShell.width());
+    $target.attr('height', $boxShell.height());
+
+    // we have to query for two things:
+    // 1) the set of topics for this user
+    // 2) the mail messages with associated 'topics' field keyed to set of topics
+
+    _this.get('eaf_api').query('topic', {})
+      .then(function(data) {
+        var topic_set = data.objects.reduce(function(acc, v) { acc[v.id] = v.shortname; return acc; }, {});
+
+        var params = {
+          min_date: tools.apiTZDateTime(start_date),
+          max_date: tools.apiTZDateTime(end_date),
+          topics: 1 // 1 == true in this context
+        };
+
+        _this.applyAlterFilter(filters, params);
+        _this.applyLabelFilter(filters, params);
+
+        // once we have the topics, we can query for the messages and build the rest of the graph
+        _this.get('eaf_api').query('mail_message', params)
+          .then(function(message_data) {
+            var msg_topics = message_data.objects.map(function(v) {
+              return {'received_on': v.received_on, 'topics': v.topics};
+            }).filter(function(v) {
+              return v.topics.length > 0;
+            });
+
+            generateChart($target.get(0), $legend_target.get(0), topic_set, msg_topics, 'days');
+
+            // now we can generate the chart
+            _this.$(".loader").hide();
+          });
+      });
+  }
+});
+
 function generateChart(target_elem, legend_elem, topic_set, message_data, bucket_width) {
   var margin = {
       top: 40,
@@ -173,14 +229,14 @@ function generateChart(target_elem, legend_elem, topic_set, message_data, bucket
   svg.append("g")
     .attr("class", "y axis")
     .call(yAxis);
-    /*
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Number of Rat Sightings");
-    */
+  /*
+   .append("text")
+   .attr("transform", "rotate(-90)")
+   .attr("y", 6)
+   .attr("dy", ".71em")
+   .style("text-anchor", "end")
+   .text("Number of Rat Sightings");
+   */
 
   // Add the legend to the second box
   Ember.$.each(topic_set, function(k, v) {
@@ -206,59 +262,3 @@ function generateChart(target_elem, legend_elem, topic_set, message_data, bucket
     $topic_set.appendTo(legend_elem);
   });
 }
-
-export default BaseMod.extend({
-  classNames: ['topic-stacked'],
-
-  bind: function(start_date, end_date, filters) {
-    var _this = this;
-
-    // display the spinner
-    this.$(".loader").show();
-
-    var $boxShell = this.$(".topicstacked-box");
-    var $target = this.$(".topicstacked-box svg");
-    var $legend_target = this.$(".topic-legend");
-
-    // remove any elements in the SVG
-    $target.empty();
-    $legend_target.empty();
-
-    $target.attr('viewBox', `0 0 ${$boxShell.width()} ${$boxShell.height()}`);
-    $target.attr('width', $boxShell.width());
-    $target.attr('height', $boxShell.height());
-
-    // we have to query for two things:
-    // 1) the set of topics for this user
-    // 2) the mail messages with associated 'topics' field keyed to set of topics
-
-    _this.get('eaf_api').query('topic', {})
-      .then(function(data) {
-        var topic_set = data.objects.reduce(function(acc, v) { acc[v.id] = v.shortname; return acc; }, {});
-
-        var params = {
-          min_date: tools.apiTZDateTime(start_date),
-          max_date: tools.apiTZDateTime(end_date),
-          topics: 1 // 1 == true in this context
-        };
-
-        _this.applyAlterFilter(filters, params);
-        _this.applyLabelFilter(filters, params);
-
-        // once we have the topics, we can query for the messages and build the rest of the graph
-        _this.get('eaf_api').query('mail_message', params)
-          .then(function(message_data) {
-            var msg_topics = message_data.objects.map(function(v) {
-              return {'received_on': v.received_on, 'topics': v.topics};
-            }).filter(function(v) {
-              return v.topics.length > 0;
-            });
-
-            generateChart($target.get(0), $legend_target.get(0), topic_set, msg_topics, 'weeks');
-
-            // now we can generate the chart
-            _this.$(".loader").hide();
-          });
-      });
-  }
-});
