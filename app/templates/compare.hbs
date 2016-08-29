@@ -5,17 +5,22 @@
     <div class="row">
         <div class="col-md-6" style="text-align: center;">
           {{ input class="interval_title" value=A_title }}
-          {{ interval-chooser action="setIntervalA" start_date=A_start_date end_date=A_end_date  }}
+          {{ interval-chooser action="setIntervalA" start_date=A_start_date end_date=A_end_date first_message_date=first_message_date }}
         </div>
         <!--<div class="col-md-2" style="text-align: center; display: flex; align-items: center; height: 130px;">-->
         <!--<button class="btn btn-lg btn-default" style="width: 150px;">Compare</button>-->
         <!--</div>-->
         <div class="col-md-6" style="text-align: center;">
           {{ input class="interval_title" value=B_title }}
-          {{ interval-chooser action="setIntervalB" start_date=B_start_date end_date=B_end_date  }}
+          {{ interval-chooser action="setIntervalB" start_date=B_start_date end_date=B_end_date first_message_date=first_message_date }}
         </div>
     </div>
 </div>
+
+{{ mail-density-graph
+    start_date_A=A_start_date end_date_A=A_end_date
+    start_date_B=B_start_date end_date_B=B_end_date
+}}
 
 {{ filter-bar action="updateFilter"
     master_params=filters

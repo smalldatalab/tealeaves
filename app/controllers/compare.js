@@ -8,6 +8,8 @@ import all_components from 'tealeaves/library/component-list';
 /* global d3 */
 
 export default Ember.Controller.extend({
+  eaf_api: Ember.inject.service('eaf-api'),
+
   A_title: "Interval A",
   B_title: "Interval B",
 
@@ -23,6 +25,21 @@ export default Ember.Controller.extend({
   update_filter: 0,
   filter_repr: Ember.computed('filters', function() { return JSON.stringify(this.get('filters')); }),
   no_components: Ember.computed.empty('available_components'),
+
+  init() {
+    this._super(...arguments);
+
+    this.get('eaf_api').query('mail_meta')
+      .then((data) => {
+        this.set('mail_meta', data);
+      });
+  },
+
+  first_message_date: Ember.computed('mail_meta', function() {
+    var parsed_date = new Date(Date.parse(this.get('mail_meta.first_message_date')));
+    console.log("Got parsed date: ", parsed_date);
+    return parsed_date;
+  }),
 
   actions: {
     setIntervalA: function(start, end) {

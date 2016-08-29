@@ -22,6 +22,8 @@ export default Ember.Component.extend({
       endDate: new Date()
     });
 
+    console.log("Datepicker is setup now");
+
     // sync up the start and end dates (if present; they might be null, which is fine)
     this.set_dates(this.get('start_date'), this.get('end_date'));
   },
@@ -38,6 +40,18 @@ export default Ember.Component.extend({
       }
     });
   },
+
+  start_limit: Ember.observer('first_message_date', function() {
+    var limit_start = this.get('first_message_date');
+    // this.$('.input-daterange').datepicker('setStartDate', limit_start);
+    console.log("Setting start limit to this: ", limit_start);
+
+    var datepicker = this.$(".input-daterange").data('datepicker');
+    datepicker.pickers[0].setStartDate(limit_start);
+    datepicker.pickers[1].setStartDate(limit_start);
+
+    // FIXME: if the component doesn't clamp dates on its own, we may need to; *verify*
+  }),
 
   set_dates: function(st, en) {
     if (st != null && en != null) {
