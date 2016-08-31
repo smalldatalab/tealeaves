@@ -28,6 +28,7 @@ export default Ember.Component.extend({
     'blacklist': 'blacklist (not any of these people)'
   },
   isAlterTimeConstrained: true,
+  dirty: false, // flag to indicate if we've received a request to refresh while hidden
 
   updateMasterParams: Ember.computed('params.selected_alter_list.[]', 'params.alter_list_type', 'params.min_sent', function() {
     this.notifyPropertyChange('params');
@@ -44,8 +45,7 @@ export default Ember.Component.extend({
     }
   },
 
-  bind: Ember.observer('isAlterTimeConstrained', 'start_date_A', 'start_date_B', 'end_date_A', 'end_date_B',
-  function() {
+  bind: Ember.observer('isAlterTimeConstrained', 'start_date_A', 'start_date_B', 'end_date_A', 'end_date_B', function() {
     Ember.run.debounce(this, this.bindAlters, 50);
   }),
 
@@ -53,6 +53,13 @@ export default Ember.Component.extend({
    * Queries for list of alters and populates dropdown with the results.
    */
   bindAlters: function() {
+    // if we're not visible, there's no reason to refresh us, but do remember that we're dirty the next time we become visible
+    if (!this.$().is(":visible")) {
+      // FIXME: actually use the dirty flag once we expand the thing
+      this.set('dirty', true);
+      return;
+    }
+
     this.set('isLoading', true);
 
     var params = {};
@@ -76,6 +83,7 @@ export default Ember.Component.extend({
 
         // select address column and remove all empty entries
         _this.set('alters', alters);
+        _this.set('dirty', false);
       })
       .finally(function() {
         // disable the loading spinner

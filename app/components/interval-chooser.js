@@ -82,14 +82,32 @@ export default Ember.Component.extend({
     return "(no interval selected)";
   }),
 
+  left_exceeds_limit: Ember.computed('start_date', 'end_date', 'first_message_date', function() {
+    if (!this.get('start_date') || !this.get('end_date')) {
+      return false;
+    }
+
+    var s = d3.time.day.floor(this.get('start_date')), e = d3.time.day.floor(this.get('end_date'));
+    var width = (e - s);
+    var result = new Date(e.getTime() - width) <= this.get('first_message_date');
+
+    console.log("left_exceeds_limit => start: ", s, ", end: ", e,  ", width: ", width, "; RESULT: ", result);
+
+    return (result)?true:null;
+  }),
+
   right_exceeds_today: Ember.computed('start_date', 'end_date', function() {
     if (!this.get('start_date') || !this.get('end_date')) {
       return false;
     }
 
     var s = d3.time.day.floor(this.get('start_date')), e = d3.time.day.floor(this.get('end_date'));
+    var width = (e - s);
+    var result = new Date(e.getTime() + width) >= new Date();
 
-    return new Date(e.getTime() + (e-s)) >= new Date();
+    console.log("right_exceeds_today => start: ", s, ", end: ", e,  ", width: ", width, "; RESULT: ", result);
+
+    return (result)?true:null;
   }),
 
   date_chosen: Ember.observer('start_date', 'end_date', function() {

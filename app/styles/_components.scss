@@ -170,20 +170,47 @@ body.dragging, body.dragging * {
   box-shadow: none;
   margin: 0;
   padding: 0;
-  border-bottom: solid 1px #eee;
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+  }
+
+  .week-label {
+    font-size: 11px;
+  }
+  .week-label.intruding {
+    fill: white;
+  }
+
+  .axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+  }
+  .weekly-bar {
+    fill: #479ccc;
+    stroke: none;
+    stroke-width: 0;
+  }
+  .interval .extent {
+    stroke-width: 1; stroke: #555;
+    opacity: 0.4;
+  }
+  .interval.region-0  .extent {
+    fill: yellow;
+  }
+  .interval.region-1  .extent {
+    fill: #ffab62;
+  }
 }
-.mail-density-graph .weekly-bar {
-  fill: #479ccc;
-  stroke: none;
-  stroke-width: 0;
+
+.mail-density-graph .week-label {
+  opacity: 0.0;
+  transition: opacity 0.2s ease;
 }
-.mail-density-graph .interval {
-  stroke-width: 0; stroke: none;
-  opacity: 0.4;
-}
-.mail-density-graph .interval.region-0 {
-  fill: yellow;
-}
-.mail-density-graph .interval.region-1 {
-  fill: #ffab62;
+
+.mail-density-graph:hover .week-label {
+  opacity: 1.0;
 }
