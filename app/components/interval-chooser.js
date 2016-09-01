@@ -8,9 +8,10 @@ import Ember from 'ember';
 /* global humanizeDuration */
 
 export default Ember.Component.extend({
-  start_date: null,
-  end_date: null,
+  // start_date: null,
+  // end_date: null,
   hasShiftControls: true,
+  STRIDE_WIDTH: (7*24*60*60*1000), // 7 days in milliseconds
 
   didInsertElement: function() {
     // save handle so we can get at the component inside the date change handler
@@ -27,6 +28,12 @@ export default Ember.Component.extend({
     // sync up the start and end dates (if present; they might be null, which is fine)
     this.set_dates(this.get('start_date'), this.get('end_date'));
   },
+
+  /*
+  date_syncer: Ember.observer('start_date', 'end_date', function() {
+    this.set_dates(this.get('start_date'), this.get('end_date'));
+  }),
+  */
 
   didRender: function() {
     var _this = this;
@@ -88,7 +95,7 @@ export default Ember.Component.extend({
     }
 
     var s = d3.time.day.floor(this.get('start_date')), e = d3.time.day.floor(this.get('end_date'));
-    var width = (e - s);
+    var width = this.STRIDE_WIDTH; // (e - s);
     var result = new Date(e.getTime() - width) <= this.get('first_message_date');
 
     console.log("left_exceeds_limit => start: ", s, ", end: ", e,  ", width: ", width, "; RESULT: ", result);
@@ -102,7 +109,8 @@ export default Ember.Component.extend({
     }
 
     var s = d3.time.day.floor(this.get('start_date')), e = d3.time.day.floor(this.get('end_date'));
-    var width = (e - s);
+    // var width = (e - s);
+    var width = this.STRIDE_WIDTH;
     var result = new Date(e.getTime() + width) >= new Date();
 
     console.log("right_exceeds_today => start: ", s, ", end: ", e,  ", width: ", width, "; RESULT: ", result);
@@ -127,11 +135,16 @@ export default Ember.Component.extend({
       if (s != null && e != null) {
         // measure the duration shift
         dir = ((dir === 'left')?-1:1);
-        var adj_start = d3.time.day.floor(d3.time.day.offset(s, dir*7));
-        var adj_end = d3.time.day.floor(d3.time.day.offset(e, dir*7 - 1)); // keep the range inclusive
+
+        // we want to move in increments of the selection
+        // var width = d3.time.days(s, e).length; // could just be '7'
+        var width = 7;
+
+        var adj_start = d3.time.day.floor(d3.time.day.offset(s, dir*width));
+        var adj_end = d3.time.day.floor(d3.time.day.offset(e, dir*width - 1)); // keep the range inclusive
 
         // bail if it shifts us past the present or before the min value
-        if (adj_end >= new Date()) {
+        if (adj_end >= new Date() || adj_start < this.get('first_message_date')) {
           return;
         }
 

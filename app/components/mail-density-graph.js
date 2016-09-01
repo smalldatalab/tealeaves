@@ -114,12 +114,37 @@ export default Ember.Component.extend({
     var extents = [[start_A, end_A], [start_B, end_B]];
     var brushG = svg.append("g").attr("class", "brushes");
 
+    // create handlers for each extent
+    var brushend_handlers = extents.map((d, i) => {
+      var _brushes = this.brushes;
+      var _this = this;
+
+      return function() {
+        var ext = _brushes[i].extent().map(d => d3.time.day.round(d));
+
+        console.log("ext for brush ", i, " changed to ", ext);
+
+        // sync up the surrounding page to this change
+        /*
+        if (i == 0) {
+          _this.set('start_date_A', ext[0]);
+          _this.set('end_date_A', ext[1]);
+        }
+        else if (i == 1) {
+          _this.set('start_date_B', ext[0]);
+          _this.set('end_date_B', ext[1]);
+        }
+        */
+      };
+    });
+
     this.brushes.clear();
 
-    for (var i = 0; i < 2; i++) {
+    extents.map((d, i) => {
       var brush = d3.svg.brush()
         .x(xScale)
-        .extent(extents[i]);
+        .extent(d)
+        .on('brushend', brushend_handlers[i]);
 
       this.brushes.push(brush);
 
@@ -129,7 +154,7 @@ export default Ember.Component.extend({
 
       brushg.selectAll("rect")
         .attr("height", height);
-    }
+    });
 
     /*
      var overlays = d3.select(target_elem)

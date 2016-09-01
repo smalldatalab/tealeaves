@@ -45,7 +45,7 @@ export default Ember.Component.extend({
     }
   },
 
-  bind: Ember.observer('isAlterTimeConstrained', 'start_date_A', 'start_date_B', 'end_date_A', 'end_date_B', function() {
+  bind: Ember.observer('isAlterTimeConstrained', 'start_date_A', 'start_date_B', 'end_date_A', 'end_date_B', 'refresh_stamp', function() {
     Ember.run.debounce(this, this.bindAlters, 50);
   }),
 

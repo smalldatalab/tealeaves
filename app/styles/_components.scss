@@ -198,11 +198,14 @@ body.dragging, body.dragging * {
     stroke-width: 1; stroke: #555;
     opacity: 0.4;
   }
+  .interval .background {
+    pointer-events: none;
+  }
   .interval.region-0  .extent {
     fill: yellow;
   }
   .interval.region-1  .extent {
-    fill: #ffab62;
+    fill: #aaff80;
   }
 }
 

@@ -10,6 +10,7 @@ export default Ember.Component.extend({
   classNames: ['filter-bar'],
   // master_params: {},
   dirty: false,
+  refresh_stamp: null,
   filter_repr: Ember.computed(
     'master_params.alters.min_sent',
     'master_params.alters.selected_alter_list.[]',
@@ -59,6 +60,9 @@ export default Ember.Component.extend({
   actions: {
     'toggleFilters': function() {
       this.$(".filter-items").toggle(300);
+
+      // it'd be nice if we could tell our children to refresh somehow, specifically the alter filter
+      this.set('refresh_stamp', new Date().getTime());
     },
     'applyFilter': function() {
       let master_params = this.get('master_params');

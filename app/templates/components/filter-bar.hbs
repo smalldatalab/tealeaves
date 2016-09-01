@@ -7,20 +7,23 @@
         <li class="list-group-item">
             {{ filters/alter-filter
                 params=master_params.alters
+                refresh_stamp=refresh_stamp
                 start_date_A=start_date_A end_date_A=end_date_A
                 start_date_B=start_date_B end_date_B=end_date_B
             }}
 
             {{ filters/token-filter
                 params=master_params.tokens
+                refresh_stamp=refresh_stamp
                 start_date_A=start_date_A end_date_A=end_date_A
                 start_date_B=start_date_B end_date_B=end_date_B
             }}
 
             {{ filters/label-filter
-              params=master_params.labels
-              start_date_A=start_date_A end_date_A=end_date_A
-              start_date_B=start_date_B end_date_B=end_date_B
+                params=master_params.labels
+                refresh_stamp=refresh_stamp
+                start_date_A=start_date_A end_date_A=end_date_A
+                start_date_B=start_date_B end_date_B=end_date_B
             }}
         </li>
 
