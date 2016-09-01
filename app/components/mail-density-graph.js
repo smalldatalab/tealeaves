@@ -4,35 +4,39 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   eaf_api: Ember.inject.service('eaf-api'),
-  brushes: [], // regular array, not a bindable value
+  regions: [],
 
   didInsertElement() {
     this._super(...arguments);
-
-    this.generate();
+    // this.generate();
   },
 
   rangeChanged: Ember.observer('start_date_A', 'start_date_B', 'end_date_A', 'end_date_B', function() {
     var extents = [[this.get('start_date_A'), this.get('end_date_A')], [this.get('start_date_B'), this.get('end_date_B')]];
 
     // find and update our brushes
-    extents.map((d, i) => {
-      var brush = this.brushes[i];
-
-      brush.extent(d);
+    this.regions.map((region, i) => {
+      region.extent = extents[i];
+      region.brush.extent(region.extent);
 
       // now draw the brush to match our extent
       // use transition to slow it down so we can see what is happening
       // remove transition so just d3.select(".brush") to just draw
-      brush(d3.select(".interval.region-" + i).transition());
+      region.brush(d3.select(".interval.region-" + i).transition());
 
       // now fire the brushstart, brushmove, and brushend events
       // remove transition so just d3.select(".brush") to just draw
-      brush.event(d3.select(".interval.region-" + i).transition().delay(1000));
+      // region.brush.event(d3.select(".interval.region-" + i).transition().delay(1000));
     });
   }),
 
-  generate() {
+  generate: Ember.observer('mail_meta', function() {
+    var mail_meta = this.get('mail_meta');
+
+    if (!mail_meta) {
+      return;
+    }
+
     var $boxShell = this.$(".mail-density-graph");
     var $target = this.$(".mail-density-graph svg");
 
@@ -43,15 +47,12 @@ export default Ember.Component.extend({
     $target.attr('width', $boxShell.width());
     $target.attr('height', $boxShell.height());
 
-    this.get('eaf_api').query('mail_meta')
-      .then((data) => {
-        this.renderChart(
-          $target.get(0), data,
-          this.get('start_date_A'), this.get('end_date_A'),
-          this.get('start_date_B'), this.get('end_date_B')
-        );
-      });
-  },
+    this.renderChart(
+      $target.get(0), this.get('mail_meta'),
+      this.get('start_date_A'), this.get('end_date_A'),
+      this.get('start_date_B'), this.get('end_date_B')
+    );
+  }),
 
   renderChart(target_elem, data, start_A, end_A, start_B, end_B) {
     var margin = {
@@ -59,9 +60,10 @@ export default Ember.Component.extend({
         right: 15,
         bottom: 20,
         left: 15
-      },
-      width = Ember.$(target_elem).width() - margin.left - margin.right,
-      height = Ember.$(target_elem).height() - margin.top - margin.bottom;
+    };
+    // var width = Ember.$(target_elem).width() - margin.left - margin.right;
+    // var height = Ember.$(target_elem).height() - margin.top - margin.bottom;
+    var width = 1140 - margin.left - margin.right, height = 60 - margin.top - margin.bottom;
 
     // get the SVG drawing area
     var svg = d3.select(target_elem)
@@ -91,7 +93,7 @@ export default Ember.Component.extend({
       .enter()
       .append('rect')
       .attr('class', 'weekly-bar')
-      .attr('width', d => xScale(d3.time.week.offset(d['week'], 1)) - xScale(d['week']) - 3 )
+      .attr('width', d => xScale(d3.time.week.offset(d['week'], 1)) - xScale(d['week']) - 2 )
       .attr('height', function(d) { return h(d['count']); })
       .attr('x', function(d) { return xScale(d['week']); })
       .attr('y', (d) => (height - h(d['count'])));
@@ -111,46 +113,54 @@ export default Ember.Component.extend({
       .text(d => d['count']);
 
     // create brushes
-    var extents = [[start_A, end_A], [start_B, end_B]];
     var brushG = svg.append("g").attr("class", "brushes");
 
-    // create handlers for each extent
-    var brushend_handlers = extents.map((d, i) => {
-      var _brushes = this.brushes;
+    this.regions = [
+      {extent: [start_A, end_A], brush: null, user_initiated: false},
+      {extent: [start_B, end_B], brush: null, user_initiated: false}
+    ];
+
+    // sets up each region to have an associated brush
+    this.regions.map((region, i) => {
       var _this = this;
 
-      return function() {
-        var ext = _brushes[i].extent().map(d => d3.time.day.round(d));
+      // create start handler when user input begins
+      region.start_handler =  function() {
+        region.user_initiated = true;
+      };
+
+      // creates end handler when user input ends
+      region.end_handler = function() {
+        var ext = region.brush.extent().map(d => d3.time.day.round(d));
 
         console.log("ext for brush ", i, " changed to ", ext);
 
         // sync up the surrounding page to this change
         /*
-        if (i == 0) {
-          _this.set('start_date_A', ext[0]);
-          _this.set('end_date_A', ext[1]);
-        }
-        else if (i == 1) {
-          _this.set('start_date_B', ext[0]);
-          _this.set('end_date_B', ext[1]);
+        if (region.user_initiated) {
+          if (i === 0) {
+            _this.set('start_date_A', ext[0]);
+            _this.set('end_date_A', ext[1]);
+          }
+          else if (i === 1) {
+            _this.set('start_date_B', ext[0]);
+            _this.set('end_date_B', ext[1]);
+          }
+
+          region.user_initiated = false;
         }
         */
       };
-    });
 
-    this.brushes.clear();
-
-    extents.map((d, i) => {
-      var brush = d3.svg.brush()
+      region.brush = d3.svg.brush()
         .x(xScale)
-        .extent(d)
-        .on('brushend', brushend_handlers[i]);
-
-      this.brushes.push(brush);
+        .extent(region.extent)
+        .on('brushstart', region.start_handler)
+        .on('brushend', region.end_handler);
 
       var brushg = brushG.append("g")
         .attr("class", "interval region-" + i)
-        .call(brush);
+        .call(region.brush);
 
       brushg.selectAll("rect")
         .attr("height", height);
