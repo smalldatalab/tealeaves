@@ -23,17 +23,13 @@ export default Ember.Component.extend({
       endDate: new Date()
     });
 
-    console.log("Datepicker is setup now");
-
     // sync up the start and end dates (if present; they might be null, which is fine)
     this.set_dates(this.get('start_date'), this.get('end_date'));
   },
 
-  /*
   date_syncer: Ember.observer('start_date', 'end_date', function() {
     this.set_dates(this.get('start_date'), this.get('end_date'));
   }),
-  */
 
   didRender: function() {
     var _this = this;
@@ -51,7 +47,6 @@ export default Ember.Component.extend({
   start_limit: Ember.observer('first_message_date', function() {
     var limit_start = this.get('first_message_date');
     // this.$('.input-daterange').datepicker('setStartDate', limit_start);
-    console.log("Setting start limit to this: ", limit_start);
 
     var datepicker = this.$(".input-daterange").data('datepicker');
     datepicker.pickers[0].setStartDate(limit_start);
@@ -98,8 +93,6 @@ export default Ember.Component.extend({
     var width = this.STRIDE_WIDTH; // (e - s);
     var result = new Date(e.getTime() - width) <= this.get('first_message_date');
 
-    console.log("left_exceeds_limit => start: ", s, ", end: ", e,  ", width: ", width, "; RESULT: ", result);
-
     return (result)?true:null;
   }),
 
@@ -112,8 +105,6 @@ export default Ember.Component.extend({
     // var width = (e - s);
     var width = this.STRIDE_WIDTH;
     var result = new Date(e.getTime() + width) >= new Date();
-
-    console.log("right_exceeds_today => start: ", s, ", end: ", e,  ", width: ", width, "; RESULT: ", result);
 
     return (result)?true:null;
   }),
