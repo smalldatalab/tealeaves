@@ -27,7 +27,7 @@
               <select class="selectpicker form-control" onchange={{action (mut selected_alter) value="target.value"}}>
                 <option value="">-- select an alter --</option>
                 {{#each alters as |current_alter|}}
-                    <option value="{{current_alter.value}}" selected={{eq current_alter selected_alter}}>{{current_alter.display}} ({{current_alter.value}})</option>
+                    <option value="{{current_alter.value}}" selected={{eq current_alter selected_alter}}>{{current_alter.display}}</option>
                 {{/each}}
               </select>
 
