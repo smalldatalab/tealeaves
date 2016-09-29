@@ -44,7 +44,7 @@
   display: none;
 }
 .loader-indicator.currently-loading {
-  display: inherit;
+  display: inline-block;
 }
 
 .filter-bar .token-blacklist-box {
