@@ -88,12 +88,14 @@ export default Ember.Component.extend({
       .call(xAxis);
 
     // bars
+    var rightPadding = 0; // adds a separation between each bar and the next
+
     svg.append("g").selectAll('rect')
       .data(week_densities)
       .enter()
       .append('rect')
       .attr('class', 'weekly-bar')
-      .attr('width', d => xScale(d3.time.week.offset(d['week'], 1)) - xScale(d['week']) - 2 )
+      .attr('width', d => xScale(d3.time.week.offset(d['week'], 1)) - xScale(d['week']) - rightPadding )
       .attr('height', function(d) { return h(d['count']); })
       .attr('x', function(d) { return xScale(d['week']); })
       .attr('y', (d) => (height - h(d['count'])));
