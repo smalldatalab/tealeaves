@@ -27,9 +27,12 @@ export default Ember.Component.extend({
     this.set_dates(this.get('start_date'), this.get('end_date'));
   },
 
+  /*
+  // FIXME: this leads to endless recursion, not really sure why
   date_syncer: Ember.observer('start_date', 'end_date', function() {
     this.set_dates(this.get('start_date'), this.get('end_date'));
   }),
+  */
 
   didRender: function() {
     var _this = this;
@@ -56,6 +59,8 @@ export default Ember.Component.extend({
   }),
 
   set_dates: function(st, en) {
+    console.log("Setting dates to: ", st, en, "...");
+
     if (st != null && en != null) {
       /*
       // FIXME: for some reason this isn't triggering the range highlighting until the user re-clicks on a date
