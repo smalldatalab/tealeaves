@@ -11,6 +11,10 @@ var emails = / ?<[^>]+>/g;
 var stripquotes = /"/g;
 var stripparens = /\([^)]*\)/g;
 
+function fullMailToDisplayName(k) {
+  return k.replace(emails, '').replace(stripquotes, '').replace(stripparens, '').trim();
+}
+
 export default BaseMod.extend({
   classNames: ['top-alters'],
   alters: [],
@@ -33,11 +37,17 @@ export default BaseMod.extend({
     // this returns a promise, which we'll use when it resolves
     this.get('eaf_api').query('mail_message', params)
       .then(function(data) {
+        console.log("Original alter email data: ", data);
+
+        // TODO: we want to create the following structure: { display_name, num_of_emails, addresses: [] }
+
         // we need to collapse on the user's name after removing single-level parentheticals
         var revised_counts = tools.countBy(
           tools.flattened(data.objects.map((x) => ((x.labels.indexOf("SENT") === -1)?(x.from_field):x.to_field.split(',')))),
-          function(k) { return k.replace(emails, '').replace(stripquotes, '').replace(stripparens, '').trim(); }
+          function(k) { return fullMailToDisplayName(k); }
         );
+
+        console.log("Flattened count data: ", revised_counts);
 
         // convert the key:value map into a [{label: <key>, value: <value>},...] array, sigh
         revised_counts = Object.keys(revised_counts).map(function (key, idx) {
