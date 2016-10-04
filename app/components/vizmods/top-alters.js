@@ -5,14 +5,36 @@
 // import Ember from 'ember';
 import BaseMod from 'tealeaves/components/vizmods/base-viz';
 import tools from 'tealeaves/library/toolkit';
+import addressparser from 'npm:addressparser';
 /* global d3 */
 
-var emails = / ?<[^>]+>/g;
 var stripquotes = /"/g;
 var stripparens = /\([^)]*\)/g;
 
-function fullMailToDisplayName(k) {
-  return k.replace(emails, '').replace(stripquotes, '').replace(stripparens, '').trim();
+function senderEmail(x) {
+  return (x.labels.indexOf("SENT") === -1) ? x.from_field : x.to_field;
+}
+
+/**
+ * For string in the form 'Display Name <address>' returns object w/name 'Display Name' and w/address 'address'.
+ * Notes:
+ * - for a string like 'address', both name and address are set to address
+ * - extra wrapping quotes are removed from 'Display Name' if present
+ * @param k the input display name + address string
+ * @returns {{name: string, address: string}|*}
+ */
+function getNameAndAddress(k) {
+  var matches = k.match(/([^<]+)<([^>]+)>/);
+
+  if (matches) {
+    return {
+      name: matches[1].replace(stripquotes, '').replace(stripparens, '').trim(),
+      address: matches[2]
+    };
+  }
+  else {
+    return { name: k, address: k };
+  }
 }
 
 export default BaseMod.extend({
@@ -39,19 +61,43 @@ export default BaseMod.extend({
       .then(function(data) {
         console.log("Original alter email data: ", data);
 
-        // TODO: we want to create the following structure: { display_name, num_of_emails, addresses: [] }
+        // TODO: we want to create the following structure: { display_name, num_of_emails, addresses: Set() }
+        // to do that, we probably need some kind of groupBy() primitive
 
-        // we need to collapse on the user's name after removing single-level parentheticals
-        var revised_counts = tools.countBy(
-          tools.flattened(data.objects.map((x) => ((x.labels.indexOf("SENT") === -1)?(x.from_field):x.to_field.split(',')))),
-          function(k) { return fullMailToDisplayName(k); }
-        );
+        var grouped_names = data.objects.reduce((acc, cur) => {
+          var addresses = addressparser(senderEmail(cur));
 
-        console.log("Flattened count data: ", revised_counts);
+          // iterate over potentially many participants in this email
+          addresses.map((info) => {
+            if (info.name === '' && info.address) {
+              info.name = info.address;
+            }
+
+            if (!acc.hasOwnProperty(info.name)) {
+              acc[info.name] = { num_emails: 1, addresses: new Set([info.address]) };
+            }
+            else {
+              acc[info.name].num_emails += 1;
+              acc[info.name].addresses.add(info.address);
+            }
+          });
+
+          return acc;
+        }, {});
+
+        /*
+         // we need to collapse on the user's name after removing single-level parentheticals
+         var revised_counts = tools.countBy(
+         tools.flattened(data.objects.map((x) => otherPerson(x)),
+         function(k) { return fullMailToDisplayName(k); }
+         );
+         */
+
+        console.log("Flattened count data: ", grouped_names);
 
         // convert the key:value map into a [{label: <key>, value: <value>},...] array, sigh
-        revised_counts = Object.keys(revised_counts).map(function (key, idx) {
-          return { id: idx+1, name: key, count: revised_counts[key] };
+        var revised_counts = Object.keys(grouped_names).map(function (key, idx) {
+          return { id: idx+1, name: key, count: grouped_names[key].num_emails, addresses: Array.from(grouped_names[key].addresses) };
         });
 
         var total_mails = d3.max(revised_counts, function(x) { return x.count; });
@@ -74,8 +120,11 @@ export default BaseMod.extend({
     addAlterToList(alter) {
       let alters_list = this.get('filters.alters.selected_alter_list');
 
-      // we should add every email address to which this alter corresponds...
-      alters_list.addObject(alter);
+      alter.addresses.map((x) => {
+        // we should add every email address to which this alter corresponds...
+        alters_list.addObject(x);
+      });
+
       // this.sendAction('action');
     }
   }
