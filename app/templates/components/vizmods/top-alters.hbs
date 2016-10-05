@@ -2,12 +2,12 @@
     <div class="container-fluid">
       {{#each alters as |person|}}
           <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-8">
                 <span style="font-size: smaller;">
-                    <a {{action 'addAlterToList' person}}>{{person.idx}}. {{ person.name }} ({{ person.addresses }})</a>
+                    <a class="alter-list-link" title="{{ person.addresses }}" {{action 'addAlterToList' person}}>{{person.idx}}. {{ person.name }}</a>
                 </span>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
                   {{ bootstrap-progressbar value=person.count maxvalue=total_mails }}
               </div>
           </div>
